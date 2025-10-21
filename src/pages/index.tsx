@@ -1,2 +1,4 @@
-export * from './Login';
-export * from './Register';
+export * from './auth/Login';
+export * from './auth/Register';
+
+export * from './user/Main'

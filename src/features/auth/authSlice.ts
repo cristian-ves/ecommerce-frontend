@@ -1,37 +1,109 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import {
+    createAsyncThunk,
+    createSlice,
+    type PayloadAction,
+} from "@reduxjs/toolkit";
 
-interface AuthState {
-  token: string | null;
-  email: string | null;
-  name: string | null;
-}
+import type { AuthState, User } from "./";
+import * as api from "./";
 
 const initialState: AuthState = {
-  token: null,
-  email: null,
-  name: null,
+    user: null,
+    token: null,
+    loading: false,
+    error: null,
 };
 
-const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    setCredentials: (
-      state,
-      action: PayloadAction<{ token: string; email: string; name: string }>
+export const loginUser = createAsyncThunk(
+    "auth/login",
+    async (
+        credentials: { email: string; password: string },
+        { rejectWithValue }
     ) => {
-      state.token = action.payload.token;
-      state.email = action.payload.email;
-      state.name = action.payload.name;
+        try {
+            return await api.login(credentials.email, credentials.password);
+        } catch (err: any) {
+            console.log(err);
+            return rejectWithValue(err.response?.data || "Login failed");
+        }
+    }
+);
+
+export const registerUser = createAsyncThunk(
+    "auth/register",
+    async (
+        data: { name: string; email: string; password: string; roleId: number },
+        { rejectWithValue }
+    ) => {
+        try {
+            return await api.register(
+                data.name,
+                data.email,
+                data.password,
+                data.roleId
+            );
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data || "Registration failed");
+        }
+    }
+);
+
+const authSlice = createSlice({
+    name: "auth",
+    initialState,
+    reducers: {
+        logout(state) {
+            state.user = null;
+            state.token = null;
+            localStorage.removeItem("token");
+        },
     },
-    logout: (state) => {
-      state.token = null;
-      state.email = null;
-      state.name = null;
+    extraReducers: (builder) => {
+        builder
+            .addCase(loginUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(
+                loginUser.fulfilled,
+                (
+                    state,
+                    action: PayloadAction<{ user: User; token: string }>
+                ) => {
+                    state.loading = false;
+                    state.user = action.payload.user;
+                    state.token = action.payload.token;
+                    localStorage.setItem("token", action.payload.token);
+                }
+            )
+            .addCase(loginUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(registerUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(
+                registerUser.fulfilled,
+                (
+                    state,
+                    action: PayloadAction<{ user: User; token: string }>
+                ) => {
+                    state.loading = false;
+                    state.user = action.payload.user;
+                    state.token = action.payload.token;
+                    localStorage.setItem("token", action.payload.token);
+                }
+            )
+            .addCase(registerUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
     },
-  },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

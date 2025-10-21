@@ -27,7 +27,7 @@ export const AppInfo = () => {
                 justifyContent: { xs: 'center', md: 'start' }
             }}>
                 <Button variant="contained" onClick={() => { navigate("/login") }}>
-                    Log in
+                    Login
                 </Button>
                 <Button variant="contained" onClick={() => { navigate("/register") }}>
                     Register
