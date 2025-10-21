@@ -4,7 +4,7 @@ import {
     type PayloadAction,
 } from "@reduxjs/toolkit";
 
-import type { AuthState, User } from "./";
+import type { AuthState, User, AuthResponse } from "./";
 import * as api from "./";
 
 const initialState: AuthState = {
@@ -14,39 +14,47 @@ const initialState: AuthState = {
     error: null,
 };
 
-export const loginUser = createAsyncThunk(
-    "auth/login",
-    async (
-        credentials: { email: string; password: string },
-        { rejectWithValue }
-    ) => {
-        try {
-            return await api.login(credentials.email, credentials.password);
-        } catch (err: any) {
-            console.log(err);
-            return rejectWithValue(err.response?.data || "Login failed");
-        }
+export const loginUser = createAsyncThunk<
+    AuthResponse,
+    { email: string; password: string },
+    { rejectValue: string }
+>("auth/login", async (credentials, { rejectWithValue }) => {
+    try {
+        return await api.login(credentials.email, credentials.password);
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Login failed");
     }
-);
+});
 
-export const registerUser = createAsyncThunk(
-    "auth/register",
-    async (
-        data: { name: string; email: string; password: string; roleId: number },
-        { rejectWithValue }
-    ) => {
-        try {
-            return await api.register(
-                data.name,
-                data.email,
-                data.password,
-                data.roleId
-            );
-        } catch (err: any) {
-            return rejectWithValue(err.response?.data || "Registration failed");
-        }
+export const registerUser = createAsyncThunk<
+    AuthResponse,
+    { name: string; email: string; password: string; roleId: number },
+    { rejectValue: string }
+>("auth/register", async (data, { rejectWithValue }) => {
+    try {
+        return await api.register(
+            data.name,
+            data.email,
+            data.password,
+            data.roleId
+        );
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Registration failed");
     }
-);
+});
+
+export const checkAuth = createAsyncThunk<
+    User,
+    string,
+    { rejectValue: string }
+>("auth/checkAuth", async (token, { rejectWithValue }) => {
+    try {
+        const data = await api.validateToken(token);
+        return data.user;
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Token validation failed");
+    }
+});
 
 const authSlice = createSlice({
     name: "auth",
@@ -100,6 +108,27 @@ const authSlice = createSlice({
             )
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(checkAuth.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(
+                checkAuth.fulfilled,
+                (state, action: PayloadAction<User>) => {
+                    state.loading = false;
+                    state.user = action.payload;
+                    state.error = null;
+                }
+            )
+            .addCase(checkAuth.rejected, (state, action) => {
+                state.loading = false;
+                state.user = null;
+                state.token = null;
+                localStorage.removeItem("token");
                 state.error = action.payload as string;
             });
     },

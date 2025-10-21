@@ -1,11 +1,14 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { registerUser } from "../../features/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
+    const navigate = useNavigate();
+
     const dispatch = useAppDispatch();
-    const { loading, error } = useAppSelector((state) => state.auth);
+    const { user, loading, error } = useAppSelector((state) => state.auth);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -14,7 +17,15 @@ export const Register = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         dispatch(registerUser({ name, email, password, roleId: 4 }))
+            .unwrap()
+            .then(() => {
+                navigate('/user')
+            })
     }
+
+    useEffect(() => {
+        if (user) navigate('/user');
+    }, [user]);
 
     return (
         <Container maxWidth="sm" sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -34,6 +45,9 @@ export const Register = () => {
                     {error && <Typography color='error'>{error}</Typography>}
                     <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }} disabled={loading}>
                         {loading ? 'Creating profile...' : 'Register'}
+                    </Button>
+                    <Button color='secondary' onClick={() => { navigate('/') }}>
+                        Back to main page
                     </Button>
                 </form>
             </Box>

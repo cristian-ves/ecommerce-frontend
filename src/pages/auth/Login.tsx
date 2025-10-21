@@ -1,12 +1,15 @@
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { loginUser } from '../../features/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
 
+    const navigate = useNavigate()
+
     const dispatch = useAppDispatch();
-    const { loading, error } = useAppSelector((state) => state.auth);
+    const { user, loading, error } = useAppSelector((state) => state.auth);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -14,7 +17,16 @@ export const Login = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         dispatch(loginUser({ email, password }))
+            .unwrap()
+            .then(() => {
+                navigate('/user')
+            })
     }
+
+    useEffect(() => {
+        if (user) navigate('/user');
+    }, [user]);
+
 
     return (
         <Container maxWidth="sm" sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -33,6 +45,9 @@ export const Login = () => {
                     {error && <Typography color='error'>{error}</Typography>}
                     <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }} disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
+                    </Button>
+                    <Button color='secondary' onClick={() => { navigate('/') }}>
+                        Back to main page
                     </Button>
                 </form>
             </Box>

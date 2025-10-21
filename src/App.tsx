@@ -3,6 +3,7 @@ import mainImage from './assets/main.png';
 import { AppInfo } from './components/main/AppInfo';
 
 export default function App() {
+
   return (
     <Container
       sx={{

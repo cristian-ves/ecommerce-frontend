@@ -15,9 +15,19 @@ export const register = async (
     password: string,
     roleId: number
 ) => {
-    const response = await axios.post<User>(
+    const response = await axios.post<{ user: User; token: string }>(
         "http://localhost:8080/api/auth/register",
         { name, email, password, roleId }
+    );
+    return response.data;
+};
+
+export const validateToken = async (token: string) => {
+    const response = await axios.get<{ user: User }>(
+        "http://localhost:8080/api/auth/validate",
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
     );
     return response.data;
 };
