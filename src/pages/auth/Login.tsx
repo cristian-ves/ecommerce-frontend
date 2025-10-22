@@ -46,7 +46,7 @@ export const Login = () => {
                     <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }} disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
                     </Button>
-                    <Button color='secondary' onClick={() => { navigate('/') }}>
+                    <Button color='secondary' sx={{ mt: 1, boxShadow: 'none' }} onClick={() => { navigate('/') }}>
                         Back to main page
                     </Button>
                 </form>

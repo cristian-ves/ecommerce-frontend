@@ -1,9 +1,9 @@
-import axios from "axios";
+import apiInstance from "../../api/axiosInstance";
 import type { User } from "./types";
 
 export const login = async (email: string, password: string) => {
-    const response = await axios.post<{ user: User; token: string }>(
-        "http://localhost:8080/api/auth/login",
+    const response = await apiInstance.post<{ user: User; token: string }>(
+        "/api/auth/login",
         { email, password }
     );
     return response.data;
@@ -15,19 +15,16 @@ export const register = async (
     password: string,
     roleId: number
 ) => {
-    const response = await axios.post<{ user: User; token: string }>(
-        "http://localhost:8080/api/auth/register",
+    const response = await apiInstance.post<{ user: User; token: string }>(
+        "/api/auth/register",
         { name, email, password, roleId }
     );
     return response.data;
 };
 
-export const validateToken = async (token: string) => {
-    const response = await axios.get<{ user: User }>(
-        "http://localhost:8080/api/auth/validate",
-        {
-            headers: { Authorization: `Bearer ${token}` },
-        }
+export const validateToken = async () => {
+    const response = await apiInstance.get<{ user: User }>(
+        "/api/auth/validate"
     );
     return response.data;
 };

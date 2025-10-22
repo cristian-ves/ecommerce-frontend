@@ -46,7 +46,7 @@ export const Register = () => {
                     <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }} disabled={loading}>
                         {loading ? 'Creating profile...' : 'Register'}
                     </Button>
-                    <Button color='secondary' onClick={() => { navigate('/') }}>
+                    <Button color='secondary' sx={{ mt: 1 }} onClick={() => { navigate('/') }}>
                         Back to main page
                     </Button>
                 </form>

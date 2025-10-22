@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/material";
-import mainImage from './assets/main.png';
+import mainImage from './assets/main.jpg';
 import { AppInfo } from './components/main/AppInfo';
 
 export default function App() {
@@ -11,7 +11,7 @@ export default function App() {
         flexDirection: { xs: 'column-reverse', md: 'row' },
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 4,
+        gap: 8,
         minHeight: '100vh',
         textAlign: { xs: 'center', md: 'left' },
       }}
@@ -21,7 +21,7 @@ export default function App() {
         src={mainImage}
         style={{
           width: '100%',
-          maxWidth: 600,
+          maxWidth: 500,
           height: 'auto',
           display: 'block',
           margin: '0 auto'

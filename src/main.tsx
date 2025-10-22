@@ -7,16 +7,18 @@ import 'normalize.css';
 
 import AppRoutes from './routes/AppRoutes';
 import { store } from './store';
+import theme from './utils/theme';
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: { main: '#7734e3' },
-    secondary: { main: '#9d88b2' },
-    background: { default: '#1f1926', paper: '#1f1926' },
-    text: { primary: '#fdf7ff', secondary: '#9d88b2' },
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     mode: 'dark',
+//     primary: { main: '#7734e3' },
+//     secondary: { main: '#9d88b2' },
+//     background: { default: '#1f1926', paper: '#1f1926' },
+//     text: { primary: '#fdf7ff', secondary: '#9d88b2' },
+//   },
+// });
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

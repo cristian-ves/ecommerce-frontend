@@ -1,11 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../features/auth/authSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "../features/auth/authSlice";
+import itemsSlice from "../features/items/itemsSlice";
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-  },
-  devTools: import.meta.env.MODE !== 'production',
+    reducer: {
+        auth: authReducer,
+        items: itemsSlice,
+    },
+    devTools: import.meta.env.MODE !== "production",
 });
 
 export type RootState = ReturnType<typeof store.getState>;

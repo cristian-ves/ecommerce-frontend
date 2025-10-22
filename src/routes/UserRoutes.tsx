@@ -19,7 +19,7 @@ export const UserRoutes = () => {
 
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
-            <AppBar position="static" sx={{ bgcolor: "background.paper" }}>
+            <AppBar position="sticky" sx={{ bgcolor: "background.paper", boxShadow: '0 8px 16px rgba(0,0,0,0.07)' }}>
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Box sx={{ display: "flex", gap: 2 }}>
                         {navItems.map((item) => (
@@ -33,7 +33,7 @@ export const UserRoutes = () => {
                                     <Button
                                         startIcon={item.icon}
                                         variant={isActive ? "contained" : "text"}
-                                        sx={{ textTransform: "none" }}
+                                        sx={{ textTransform: "none", boxShadow: 'none' }}
                                     >
                                         {item.label}
                                     </Button>
