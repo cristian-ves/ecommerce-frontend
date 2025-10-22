@@ -23,6 +23,7 @@ export interface Item {
     new: boolean;
     category: Category;
     user: User;
+    stock: number;
     rating: number;
     rates: number;
     accepted: boolean;

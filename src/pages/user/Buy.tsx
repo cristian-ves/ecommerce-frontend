@@ -1,77 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
-import { Box, Button, CircularProgress } from "@mui/material";
 
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { loadItems } from "../../features/items/";
-import { ItemCard } from '../../components/items/ItemCard';
+import { Box, Typography } from "@mui/material";
 
-export const ITEMS_TO_LOAD = 30;
+import { ItemCard, LoadMoreButton } from '../../components/items/';
+import { useItemsLoader } from '../../hooks/useItemsLoader';
+import { Sidebar } from "../../components/filters";
 
 export const Buy = () => {
+    const { items, loading, hasMore, loadMore, error } = useItemsLoader();
 
-    const firstLoadRef = useRef(true);
-    const dispatch = useAppDispatch();
-    const { items, loading, page, hasMore } = useAppSelector(
-        (state) => state.items
-    );
-
-    useEffect(() => {
-        if (firstLoadRef.current) {
-            dispatch(loadItems({ page: 0, size: ITEMS_TO_LOAD }));
-            firstLoadRef.current = false;
-        }
-    }, [dispatch]);
-
-
-    const handleLoadMore = () => {
-        if (!loading && hasMore) {
-            dispatch(loadItems({ page: page, size: ITEMS_TO_LOAD }));
-        }
+    const handleAddToCart = (id: number) => {
+        console.log('Add item to cart:', id);
     };
 
-    const handleAddToCart = () => {
-        console.log('hello')
-    }
-
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 5,
-                justifyContent: "center",
-                padding: 2,
-            }}
-        >
-            {items.map((item) => (
-                <ItemCard key={item.id} handleAddToCart={handleAddToCart} item={item} />
-            ))}
-
-            <Box
-                sx={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    mt: 4,
-                }}
-            >
-                {loading ? (
-                    <CircularProgress />
-                ) : hasMore ? (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleLoadMore}
-                    >
-                        Load More
-                    </Button>
+        <Box sx={{ display: 'flex', flex: 1, height: '100%' }}>
+            <Sidebar />
+            <Box sx={{ flex: 1, display: "flex", flexWrap: "wrap", gap: 5, justifyContent: "center", p: 2 }}>
+                {error ? (
+                    <Typography variant="h5" color="error">{error}</Typography>
                 ) : (
-                    <Button variant="outlined" disabled>
-                        No more items
-                    </Button>
+                    <>
+                        {items.map((item) => (
+                            <ItemCard key={item.id} handleAddToCart={handleAddToCart} item={item} />
+                        ))}
+                        <LoadMoreButton loading={loading} hasMore={hasMore} onLoadMore={loadMore} />
+                    </>
                 )}
             </Box>
-
         </Box>
     );
 };

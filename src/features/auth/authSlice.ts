@@ -43,18 +43,19 @@ export const registerUser = createAsyncThunk<
     }
 });
 
-export const checkAuth = createAsyncThunk<
-    User,
-    string,
-    { rejectValue: string }
->("auth/checkAuth", async (token, { rejectWithValue }) => {
-    try {
-        const data = await api.validateToken(token);
-        return data.user;
-    } catch (err: any) {
-        return rejectWithValue(err.response?.data || "Token validation failed");
+export const checkAuth = createAsyncThunk<User, void, { rejectValue: string }>(
+    "auth/checkAuth",
+    async (_, { rejectWithValue }) => {
+        try {
+            const data = await api.validateToken();
+            return data.user;
+        } catch (err: any) {
+            return rejectWithValue(
+                err.response?.data || "Token validation failed"
+            );
+        }
     }
-});
+);
 
 const authSlice = createSlice({
     name: "auth",

@@ -3,9 +3,9 @@ import {
     createAsyncThunk,
     type PayloadAction,
 } from "@reduxjs/toolkit";
-import { fetchItems } from "./api";
+import { fetchItems, searchItems, searchItemsByCategoryIds } from "./api";
 import type { Item, ItemsState } from "./";
-import { ITEMS_TO_LOAD } from "../../pages/user";
+import { ITEMS_TO_LOAD } from "../../hooks/useItemsLoader";
 
 const initialState: ItemsState = {
     items: [],
@@ -28,6 +28,32 @@ export const loadItems = createAsyncThunk<
     }
 });
 
+export const searchItemsByQuery = createAsyncThunk<
+    Item[],
+    { query: string },
+    { rejectValue: string }
+>("items/searchItems", async ({ query }, { rejectWithValue }) => {
+    try {
+        const data = await searchItems(query);
+        return data;
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to search items");
+    }
+});
+
+export const applyFilters = createAsyncThunk<
+    Item[],
+    { categoryIds: number[] },
+    { rejectValue: string }
+>("items/applyFilters", async ({ categoryIds }, { rejectWithValue }) => {
+    try {
+        const data = await searchItemsByCategoryIds(categoryIds);
+        return data;
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to apply filters");
+    }
+});
+
 const itemsSlice = createSlice({
     name: "items",
     initialState,
@@ -42,6 +68,8 @@ const itemsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loadItems.pending, (state) => {
+                if (state.page == 0) state.items = [];
+                state.hasMore = true;
                 state.loading = true;
                 state.error = null;
             })
@@ -58,6 +86,47 @@ const itemsSlice = createSlice({
                 }
             )
             .addCase(loadItems.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(searchItemsByQuery.pending, (state) => {
+                state.loading = true;
+                state.items = [];
+                state.error = null;
+                state.hasMore = false;
+                state.page = 0;
+            })
+            .addCase(
+                searchItemsByQuery.fulfilled,
+                (state, action: PayloadAction<Item[]>) => {
+                    state.loading = false;
+
+                    state.items = [...action.payload];
+                }
+            )
+            .addCase(searchItemsByQuery.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(applyFilters.pending, (state) => {
+                state.loading = true;
+                state.items = [];
+                state.error = null;
+                state.hasMore = false;
+                state.page = 0;
+            })
+            .addCase(
+                applyFilters.fulfilled,
+                (state, action: PayloadAction<Item[]>) => {
+                    state.loading = false;
+                    state.items = [...action.payload];
+                }
+            )
+            .addCase(applyFilters.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

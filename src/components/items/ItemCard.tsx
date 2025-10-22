@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import type { Item } from "../../features/items";
-import { ItemInfo } from "./ItemInfo";
+import { ItemInfo } from ".";
 
 interface CartProps {
     item: Item;
@@ -12,7 +12,7 @@ export const ItemCard = ({ item, handleAddToCart }: CartProps) => {
         <Card
             sx={{
                 width: 280,
-                height: 480,
+                height: 500,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -37,6 +37,7 @@ export const ItemCard = ({ item, handleAddToCart }: CartProps) => {
                     variant="contained"
                     fullWidth
                     onClick={() => handleAddToCart(item.id)}
+                    disabled={item.stock <= 0}
                 >
                     Add to Cart
                 </Button>

@@ -17,8 +17,15 @@ export const UserRoutes = () => {
         { label: "Cart", path: "/user/cart", icon: <ShoppingCartIcon /> },
     ];
 
+    //TODO: make this responsive
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
+        <Box sx={{
+            minHeight: '100vh',
+            bgcolor: 'background.default',
+            color: 'text.primary',
+            display: 'flex',
+            flexDirection: 'column',
+        }}>
             <AppBar position="sticky" sx={{ bgcolor: "background.paper", boxShadow: '0 8px 16px rgba(0,0,0,0.07)' }}>
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Box sx={{ display: "flex", gap: 2 }}>
@@ -56,7 +63,7 @@ export const UserRoutes = () => {
                 </Toolbar>
             </AppBar>
 
-            <Box sx={{ p: 4 }}>
+            <Box sx={{ p: 4, flexGrow: 1 }}>
                 <Outlet />
             </Box>
         </Box>
