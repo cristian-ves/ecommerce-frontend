@@ -1,13 +1,28 @@
 import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import type { Item } from "../../features/items";
 import { ItemInfo } from ".";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addToCart } from "../../features/cart";
+import { useSnackbar } from "notistack";
 
 interface CartProps {
     item: Item;
-    handleAddToCart: (id: number) => void;
 }
 
-export const ItemCard = ({ item, handleAddToCart }: CartProps) => {
+export const ItemCard = ({ item }: CartProps) => {
+    const dispatch = useAppDispatch();
+    const { user } = useAppSelector((state) => state.auth);
+
+    const { enqueueSnackbar } = useSnackbar();
+
+    const handleAddToCart = () => {
+        if (!user) return;
+        dispatch(addToCart({ userId: user.id, itemId: item.id }));
+
+        enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" })
+
+    }
+
     return (
         <Card
             sx={{
@@ -36,7 +51,7 @@ export const ItemCard = ({ item, handleAddToCart }: CartProps) => {
                 <Button
                     variant="contained"
                     fullWidth
-                    onClick={() => handleAddToCart(item.id)}
+                    onClick={() => handleAddToCart()}
                     disabled={item.stock <= 0}
                 >
                     Add to Cart

@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { registerUser } from "../../features/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loadCart } from "../../features/cart";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -14,13 +15,17 @@ export const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        dispatch(registerUser({ name, email, password, roleId: 4 }))
-            .unwrap()
-            .then(() => {
-                navigate('/user')
-            })
+
+        const resultAction = await dispatch(registerUser({ name, email, password, roleId: 4 }));
+
+        if (registerUser.fulfilled.match(resultAction)) {
+            const user = resultAction.payload.user;
+            dispatch(loadCart(user.id));
+            navigate('/user');
+        }
+
     }
 
     useEffect(() => {

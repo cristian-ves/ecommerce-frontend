@@ -12,11 +12,11 @@ export const useItemsLoader = () => {
     );
 
     useEffect(() => {
-        if (firstLoadRef.current) {
+        if (firstLoadRef.current && items.length === 0) {
             dispatch(loadItems({ page: 0, size: ITEMS_TO_LOAD }));
             firstLoadRef.current = false;
         }
-    }, [dispatch]);
+    }, [dispatch, items.length]);
 
     const loadMore = () => {
         if (!loading && hasMore) {

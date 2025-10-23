@@ -7,7 +7,8 @@ import { Login, Register } from "../pages/auth";
 import { Main, Buy, Sell, Cart } from "../pages/user";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { checkAuth } from "../features/auth";
-import { UserRoutes } from "./UserRoutes";
+import { UserRoutes } from "./UserLayout";
+import { loadCart } from "../features/cart";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -16,7 +17,15 @@ export default function AppRoutes() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token && !user) {
-            dispatch(checkAuth(token));
+            (async () => {
+                const resultAction = await dispatch(checkAuth());
+
+                if (checkAuth.fulfilled.match(resultAction)) {
+                    const user = resultAction.payload;
+                    await dispatch(loadCart(user.id));
+                }
+
+            })();
         }
     }, [user]);
 

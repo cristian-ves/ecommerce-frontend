@@ -8,13 +8,14 @@ import { logout } from "../features/auth";
 
 export const UserRoutes = () => {
     const { user } = useAppSelector((state) => state.auth);
+    const { items } = useAppSelector((state) => state.cart);
     const dispatch = useAppDispatch();
 
     const navItems = [
         { label: "Home", path: "/user", icon: <HomeIcon /> },
         { label: "Buy", path: "/user/buy", icon: <FaShoppingBag /> },
         { label: "Sell", path: "/user/sell", icon: <FaDollarSign /> },
-        { label: "Cart", path: "/user/cart", icon: <ShoppingCartIcon /> },
+        { label: `Cart (${items.length || 0})`, path: "/user/cart", icon: <ShoppingCartIcon /> },
     ];
 
     //TODO: make this responsive

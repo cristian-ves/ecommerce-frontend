@@ -6,12 +6,12 @@ export const AppInfo = () => {
     const navigate = useNavigate();
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, textAlign: 'center' }}>
             <Typography variant="h3" mt={5}>
                 E-commerce
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' }, gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center' }, gap: 1 }}>
                 <Typography variant="h5">Application created using</Typography>
                 <SiSpringboot size={30} color="#6DB33F" />
                 <SiReact size={30} color="#61DAFB" />
@@ -24,12 +24,12 @@ export const AppInfo = () => {
             <Box sx={{
                 display: 'flex',
                 gap: 2,
-                justifyContent: { xs: 'center', md: 'start' }
+                justifyContent: { xs: 'center' }
             }}>
-                <Button variant="contained" onClick={() => { navigate("/login") }}>
+                <Button variant="contained" onClick={() => { navigate("/login") }} fullWidth>
                     Login
                 </Button>
-                <Button variant="contained" onClick={() => { navigate("/register") }}>
+                <Button variant="contained" onClick={() => { navigate("/register") }} fullWidth>
                     Register
                 </Button>
             </Box>

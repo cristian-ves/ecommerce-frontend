@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/material";
-import mainImage from './assets/main.jpg';
+import mainImage from './assets/main.png';
 import { AppInfo } from './components/main/AppInfo';
 
 export default function App() {

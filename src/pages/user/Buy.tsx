@@ -8,10 +8,6 @@ import { Sidebar } from "../../components/filters";
 export const Buy = () => {
     const { items, loading, hasMore, loadMore, error } = useItemsLoader();
 
-    const handleAddToCart = (id: number) => {
-        console.log('Add item to cart:', id);
-    };
-
     return (
         <Box sx={{ display: 'flex', flex: 1, height: '100%' }}>
             <Sidebar />
@@ -21,7 +17,7 @@ export const Buy = () => {
                 ) : (
                     <>
                         {items.map((item) => (
-                            <ItemCard key={item.id} handleAddToCart={handleAddToCart} item={item} />
+                            <ItemCard key={item.id} item={item} />
                         ))}
                         <LoadMoreButton loading={loading} hasMore={hasMore} onLoadMore={loadMore} />
                     </>
