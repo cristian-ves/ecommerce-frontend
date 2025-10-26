@@ -5,6 +5,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { FaShoppingBag, FaDollarSign } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../features/auth";
+import { ShoppingBag } from "@mui/icons-material";
 
 export const UserRoutes = () => {
     const { user } = useAppSelector((state) => state.auth);
@@ -16,6 +17,7 @@ export const UserRoutes = () => {
         { label: "Buy", path: "/user/buy", icon: <FaShoppingBag /> },
         { label: "Sell", path: "/user/sell", icon: <FaDollarSign /> },
         { label: `Cart (${items.length || 0})`, path: "/user/cart", icon: <ShoppingCartIcon /> },
+        { label: "Purchases", path: "/user/purchases", icon: <ShoppingBag /> }
     ];
 
     //TODO: make this responsive

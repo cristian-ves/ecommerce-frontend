@@ -5,7 +5,7 @@ import { CircleIconButton } from "./CircleIconButton";
 
 interface Props {
     cartItem: CartItem;
-    onIncrement: (itemId: number) => void;
+    onIncrement: (cartItem: CartItem) => void;
     onDecrement: (cartItem: CartItem) => void;
     onRemove: (itemId: number) => void;
 }
@@ -59,7 +59,7 @@ export const CartItemCard = ({ cartItem, onIncrement, onDecrement, onRemove }: P
 
                 <Typography>{cartItem.quantity}</Typography>
 
-                <CircleIconButton onClick={() => onIncrement(cartItem.item.id)}>
+                <CircleIconButton onClick={() => onIncrement(cartItem)}>
                     <Add fontSize="small" />
                 </CircleIconButton>
             </Box>

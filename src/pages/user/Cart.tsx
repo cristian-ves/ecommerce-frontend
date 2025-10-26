@@ -18,6 +18,7 @@ import {
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { CartItemCard } from "../../components/cart";
+import { useNavigate } from "react-router-dom";
 
 
 const MySwal = withReactContent(Swal);
@@ -26,6 +27,7 @@ export const Cart = () => {
     const dispatch = useAppDispatch();
     const { items, error } = useAppSelector((state) => state.cart);
     const { user } = useAppSelector((state) => state.auth);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
@@ -33,9 +35,18 @@ export const Cart = () => {
         }
     }, [dispatch, user]);
 
-    const handleIncrement = (itemId: number) => {
+    const handleIncrement = (cartItem: CartItem) => {
         if (!user) return;
-        dispatch(addToCart({ userId: user.id, itemId }));
+        if (cartItem.item.stock - cartItem.quantity <= 0) {
+            MySwal.fire({
+                title: "Can't add to the cart, stock not available",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#d32f2f",
+            });
+        } else {
+            dispatch(addToCart({ userId: user.id, itemId: cartItem.item.id }));
+        }
     };
 
     const handleDecrement = (cartItem: CartItem) => {
@@ -91,7 +102,7 @@ export const Cart = () => {
                         <CartItemCard
                             key={cartItem.item.id}
                             cartItem={cartItem}
-                            onIncrement={() => handleIncrement(cartItem.item.id)}
+                            onIncrement={() => handleIncrement(cartItem)}
                             onDecrement={() => handleDecrement(cartItem)}
                             onRemove={() => handleRemove(cartItem.item.id)}
                         />
@@ -113,7 +124,7 @@ export const Cart = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleClearCart}
+                    onClick={() => { navigate("/user/cards") }}
                     sx={{ width: 300 }}
                 >
                     Complete Payment

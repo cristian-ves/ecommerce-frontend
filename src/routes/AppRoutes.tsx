@@ -4,11 +4,12 @@ import { Box } from "@mui/material";
 
 import App from "../App";
 import { Login, Register } from "../pages/auth";
-import { Main, Buy, Sell, Cart } from "../pages/user";
+import { Main, Buy, Sell, Cart, Cards } from "../pages/user";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { checkAuth } from "../features/auth";
 import { UserRoutes } from "./UserLayout";
 import { loadCart } from "../features/cart";
+import { Purchases } from "../pages/purchase/Purchases";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -46,6 +47,8 @@ export default function AppRoutes() {
                             <Route path="buy" element={<Buy />} />
                             <Route path="sell" element={<Sell />} />
                             <Route path="cart" element={<Cart />} />
+                            <Route path="cards" element={<Cards />} />
+                            <Route path="purchases" element={<Purchases />} />
                         </Route>
                         <Route path="/*" element={<Navigate to="/user" replace />} />
                     </>

@@ -17,9 +17,14 @@ export const ItemCard = ({ item }: CartProps) => {
 
     const handleAddToCart = () => {
         if (!user) return;
-        dispatch(addToCart({ userId: user.id, itemId: item.id }));
+        if (user.id == item.user.id) {
+            enqueueSnackbar(`${item.name} not added, it belongs to you`, { variant: "error" })
+        } else {
 
-        enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" })
+            dispatch(addToCart({ userId: user.id, itemId: item.id }));
+
+            enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" })
+        }
 
     }
 
