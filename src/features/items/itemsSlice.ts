@@ -9,8 +9,9 @@ import {
     searchItems,
     searchItemsByCategoryIds,
     searchItemsByUserId,
+    updateItem,
 } from "./api";
-import type { Item, ItemsState, NewItem } from "./";
+import type { Item, ItemsState, NewItem, UpdatedItem } from "./";
 import { ITEMS_TO_LOAD } from "../../hooks/useItemsLoader";
 
 const initialState: ItemsState = {
@@ -84,6 +85,18 @@ export const addNewItem = createAsyncThunk<
         return data;
     } catch (err: any) {
         return rejectWithValue(err.response?.data || "Failed to add item");
+    }
+});
+
+export const updateExistingItem = createAsyncThunk<
+    void,
+    UpdatedItem,
+    { rejectValue: string }
+>("items/update", async (item: UpdatedItem, { rejectWithValue }) => {
+    try {
+        await updateItem(item);
+    } catch (err: any) {
+        rejectWithValue(err.response?.data || "Failed to update item");
     }
 });
 
@@ -192,6 +205,20 @@ const itemsSlice = createSlice({
                 state.error = null;
             })
             .addCase(addNewItem.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(updateExistingItem.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateExistingItem.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(updateExistingItem.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

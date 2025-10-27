@@ -12,6 +12,7 @@ import { loadCart } from "../features/cart";
 import { Purchases } from "../pages/purchase/Purchases";
 import { AddItems } from "../pages/user/AddItems";
 import { SellLayout } from "./SellLayout";
+import { EditItem } from "../pages/user/EditItem";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -50,6 +51,7 @@ export default function AppRoutes() {
                             <Route path="sell" element={<SellLayout />}>
                                 <Route index element={<Sell />} />
                                 <Route path="add" element={<AddItems />} />
+                                <Route path="item/*" element={<EditItem />} />
                             </Route>
                             <Route path="cart" element={<Cart />} />
                             <Route path="cards" element={<Cards />} />

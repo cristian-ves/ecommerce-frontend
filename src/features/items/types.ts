@@ -40,6 +40,10 @@ export interface NewItem {
     user: User;
 }
 
+export interface UpdatedItem extends NewItem {
+    id: number;
+}
+
 export interface ItemsState {
     items: Item[];
     myItems: Item[];
