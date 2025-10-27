@@ -1,5 +1,5 @@
 import apiInstance from "../../api/axiosInstance";
-import type { Item } from "./types";
+import type { Item, NewItem } from "./types";
 
 export const fetchItems = async (page: number, size: number) => {
     const response = await apiInstance.get<Item[]>(
@@ -18,5 +18,15 @@ export const searchItemsByCategoryIds = async (categoryIds: number[]) => {
 
     const params = categoryIds.map((id) => `categories=${id}`).join("&");
     const response = await apiInstance.get<Item[]>(`/items/filter?${params}`);
+    return response.data;
+};
+
+export const searchItemsByUserId = async (id: number) => {
+    const response = await apiInstance.get<Item[]>(`/items/user/${id}`);
+    return response.data;
+};
+
+export const addItem = async (item: NewItem) => {
+    const response = await apiInstance.post<Item>(`/items/add`, item);
     return response.data;
 };

@@ -10,6 +10,8 @@ import { checkAuth } from "../features/auth";
 import { UserRoutes } from "./UserLayout";
 import { loadCart } from "../features/cart";
 import { Purchases } from "../pages/purchase/Purchases";
+import { AddItems } from "../pages/user/AddItems";
+import { SellLayout } from "./SellLayout";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -45,7 +47,10 @@ export default function AppRoutes() {
                         <Route path="/user" element={<UserRoutes />}>
                             <Route index element={<Main />} />
                             <Route path="buy" element={<Buy />} />
-                            <Route path="sell" element={<Sell />} />
+                            <Route path="sell" element={<SellLayout />}>
+                                <Route index element={<Sell />} />
+                                <Route path="add" element={<AddItems />} />
+                            </Route>
                             <Route path="cart" element={<Cart />} />
                             <Route path="cards" element={<Cards />} />
                             <Route path="purchases" element={<Purchases />} />

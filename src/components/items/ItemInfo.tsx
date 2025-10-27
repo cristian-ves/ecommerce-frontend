@@ -21,6 +21,12 @@ export const ItemInfo = ({ item }: ItemInfoProps) => (
         <Typography variant="body2" sx={{ mt: 0.5, color: item.stock > 0 ? 'success.main' : 'error.main' }}>
             {item.stock > 0 ? `In stock: ${item.stock}` : 'Out of stock'}
         </Typography>
+        {!item.accepted &&
+            (
+                <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                    Not accepted
+                </Typography>
+            )}
         <RatingStars rating={item.rating} rates={item.rates} />
     </Box>
 );

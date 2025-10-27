@@ -12,19 +12,26 @@ interface CartProps {
 export const ItemCard = ({ item }: CartProps) => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
+    const { items } = useAppSelector((state) => state.cart)
 
     const { enqueueSnackbar } = useSnackbar();
 
     const handleAddToCart = () => {
         if (!user) return;
+
         if (user.id == item.user.id) {
             enqueueSnackbar(`${item.name} not added, it belongs to you`, { variant: "error" })
-        } else {
-
-            dispatch(addToCart({ userId: user.id, itemId: item.id }));
-
-            enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" })
+            return;
         }
+
+        const alreadyInCart = items.some((cartItem) => cartItem.item.id == item.id);
+        if (alreadyInCart) {
+            enqueueSnackbar(`${item.name} is already in your cart!`, { variant: "warning" })
+            return;
+        }
+
+        dispatch(addToCart({ userId: user.id, itemId: item.id }));
+        enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" })
 
     }
 

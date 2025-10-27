@@ -3,12 +3,19 @@ import {
     createAsyncThunk,
     type PayloadAction,
 } from "@reduxjs/toolkit";
-import { fetchItems, searchItems, searchItemsByCategoryIds } from "./api";
-import type { Item, ItemsState } from "./";
+import {
+    addItem,
+    fetchItems,
+    searchItems,
+    searchItemsByCategoryIds,
+    searchItemsByUserId,
+} from "./api";
+import type { Item, ItemsState, NewItem } from "./";
 import { ITEMS_TO_LOAD } from "../../hooks/useItemsLoader";
 
 const initialState: ItemsState = {
     items: [],
+    myItems: [],
     loading: false,
     error: null,
     page: 0,
@@ -51,6 +58,32 @@ export const applyFilters = createAsyncThunk<
         return data;
     } catch (err: any) {
         return rejectWithValue(err.response?.data || "Failed to apply filters");
+    }
+});
+
+export const loadMyItems = createAsyncThunk<
+    Item[],
+    { id: number },
+    { rejectValue: string }
+>("items/loadMyItems", async ({ id }, { rejectWithValue }) => {
+    try {
+        const data = await searchItemsByUserId(id);
+        return data;
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to apply filters");
+    }
+});
+
+export const addNewItem = createAsyncThunk<
+    Item,
+    NewItem,
+    { rejectValue: string }
+>("items/add", async (item: NewItem, { rejectWithValue }) => {
+    try {
+        const data = await addItem(item);
+        return data;
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to add item");
     }
 });
 
@@ -127,6 +160,38 @@ const itemsSlice = createSlice({
                 }
             )
             .addCase(applyFilters.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(loadMyItems.pending, (state) => {
+                state.loading = true;
+                state.myItems = [];
+                state.error = null;
+            })
+            .addCase(
+                loadMyItems.fulfilled,
+                (state, action: PayloadAction<Item[]>) => {
+                    state.loading = false;
+                    state.myItems = [...action.payload];
+                }
+            )
+            .addCase(loadMyItems.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(addNewItem.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(addNewItem.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(addNewItem.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

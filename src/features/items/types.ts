@@ -29,8 +29,20 @@ export interface Item {
     accepted: boolean;
 }
 
+export interface NewItem {
+    name: string;
+    description: string;
+    image: string;
+    price: number;
+    stock: number;
+    isNew: boolean;
+    category: Category;
+    user: User;
+}
+
 export interface ItemsState {
     items: Item[];
+    myItems: Item[];
     loading: boolean;
     error: string | null;
     page: number;
