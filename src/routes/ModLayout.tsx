@@ -1,30 +1,24 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { Box, AppBar, Toolbar, Typography, Button } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { FaShoppingBag, FaDollarSign } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../features/auth";
-import { ShoppingBag } from "@mui/icons-material";
+import { Block } from "@mui/icons-material";
 
-export const UserRoutes = () => {
+export const ModLayout = () => {
     const { user } = useAppSelector((state) => state.auth);
-    const { items } = useAppSelector((state) => state.cart);
     const dispatch = useAppDispatch();
 
     const navItems = [
-        { label: "Home", path: "/user", icon: <HomeIcon /> },
-        { label: "Buy", path: "/user/buy", icon: <FaShoppingBag /> },
-        { label: "Sell", path: "/user/sell", icon: <FaDollarSign /> },
-        { label: `Cart (${items.length || 0})`, path: "/user/cart", icon: <ShoppingCartIcon /> },
-        { label: "Purchases", path: "/user/purchases", icon: <ShoppingBag /> }
+        { label: "Items Request", path: "/mod", icon: <HomeIcon /> },
+        { label: "Bans", path: "/mod/bans", icon: <Block /> },
     ];
 
     return (
         <Box sx={{
             minHeight: '100vh',
             bgcolor: 'background.default',
-            color: 'text.primary',
+            color: 'text.secondary',
             display: 'flex',
             flexDirection: 'column',
         }}>
@@ -35,7 +29,7 @@ export const UserRoutes = () => {
                             <NavLink
                                 key={item.path}
                                 to={item.path}
-                                end={item.path === "/user"}
+                                end={item.path === "/mod"}
                                 style={{ textDecoration: "none" }}
                             >
                                 {({ isActive }) => (

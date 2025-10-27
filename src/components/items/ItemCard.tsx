@@ -39,7 +39,7 @@ export const ItemCard = ({ item }: CartProps) => {
         <Card
             sx={{
                 width: 280,
-                height: 500,
+                height: 525,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",

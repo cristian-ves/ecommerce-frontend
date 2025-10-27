@@ -121,9 +121,9 @@ export const AddItems = () => {
             <FormControl>
                 <InputLabel>Condition</InputLabel>
                 <Select
-                    value={formData.isNew ? "new" : "used"}
+                    value={formData.new ? "new" : "used"}
                     onChange={(e: SelectChangeEvent) =>
-                        handleChange("isNew", e.target.value === "new")
+                        handleChange("new", e.target.value === "new")
                     }
                 >
                     <MenuItem value="new">Brand New</MenuItem>

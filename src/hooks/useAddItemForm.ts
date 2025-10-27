@@ -7,7 +7,7 @@ export interface AddItemFormData {
     image: string;
     price: number | "";
     stock: number | "";
-    isNew: boolean;
+    new: boolean;
     category: Category | null;
 }
 
@@ -18,7 +18,7 @@ export const useAddItemForm = (categories: Category[]) => {
         image: "",
         price: "",
         stock: 1,
-        isNew: true,
+        new: true,
         category: categories[0] || null,
     });
 

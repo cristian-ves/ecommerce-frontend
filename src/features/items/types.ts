@@ -35,7 +35,7 @@ export interface NewItem {
     image: string;
     price: number;
     stock: number;
-    isNew: boolean;
+    new: boolean;
     category: Category;
     user: User;
 }
@@ -51,4 +51,9 @@ export interface ItemsState {
     error: string | null;
     page: number;
     hasMore: boolean;
+}
+
+export interface ReviewItemPayload {
+    id: number;
+    rate: number;
 }

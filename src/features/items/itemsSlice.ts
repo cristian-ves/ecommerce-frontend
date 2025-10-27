@@ -6,12 +6,19 @@ import {
 import {
     addItem,
     fetchItems,
+    reviewItem,
     searchItems,
     searchItemsByCategoryIds,
     searchItemsByUserId,
     updateItem,
 } from "./api";
-import type { Item, ItemsState, NewItem, UpdatedItem } from "./";
+import type {
+    Item,
+    ItemsState,
+    NewItem,
+    ReviewItemPayload,
+    UpdatedItem,
+} from "./";
 import { ITEMS_TO_LOAD } from "../../hooks/useItemsLoader";
 
 const initialState: ItemsState = {
@@ -96,7 +103,19 @@ export const updateExistingItem = createAsyncThunk<
     try {
         await updateItem(item);
     } catch (err: any) {
-        rejectWithValue(err.response?.data || "Failed to update item");
+        return rejectWithValue(err.response?.data || "Failed to update item");
+    }
+});
+
+export const reviewExistingItem = createAsyncThunk<
+    void,
+    ReviewItemPayload,
+    { rejectValue: string }
+>("items/review", async (payload, { rejectWithValue }) => {
+    try {
+        await reviewItem(payload);
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to review item");
     }
 });
 
@@ -219,6 +238,20 @@ const itemsSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateExistingItem.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        builder
+            .addCase(reviewExistingItem.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(reviewExistingItem.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(reviewExistingItem.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

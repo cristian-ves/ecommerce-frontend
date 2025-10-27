@@ -13,6 +13,8 @@ import { Purchases } from "../pages/purchase/Purchases";
 import { AddItems } from "../pages/user/AddItems";
 import { SellLayout } from "./SellLayout";
 import { EditItem } from "../pages/user/EditItem";
+import { ModLayout } from "./ModLayout";
+import { ItemRequests, Bans } from "../pages/mod";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -59,9 +61,19 @@ export default function AppRoutes() {
                         </Route>
                         <Route path="/*" element={<Navigate to="/user" replace />} />
                     </>
-                ) : (
-                    <Route path="/process" element={<h1>Working on it...</h1>} />
-                )}
+                ) : user.role.id === 2 ? (
+                    <>
+                        <Route path="/mod" element={<ModLayout />} >
+                            <Route index element={<ItemRequests />} />
+                            <Route path="bans" element={<Bans />} />
+                        </Route>
+                        <Route path="/*" element={<Navigate to="/mod" replace />} />
+
+                    </>
+                )
+                    : (
+                        <Route path="/process" element={<h1>Working on it...</h1>} />
+                    )}
             </Routes>
         </Box>
     );

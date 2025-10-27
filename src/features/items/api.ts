@@ -1,5 +1,5 @@
 import apiInstance from "../../api/axiosInstance";
-import type { Item, NewItem, UpdatedItem } from "./types";
+import type { Item, NewItem, ReviewItemPayload, UpdatedItem } from "./types";
 
 export const fetchItems = async (page: number, size: number) => {
     const response = await apiInstance.get<Item[]>(
@@ -33,4 +33,8 @@ export const addItem = async (item: NewItem) => {
 
 export const updateItem = async (item: UpdatedItem) => {
     await apiInstance.put<void>("/items/update", item);
+};
+
+export const reviewItem = async ({ id, rate }: ReviewItemPayload) => {
+    await apiInstance.put<void>(`/items/review?rate=${rate}`, { id });
 };
