@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import App from "../App";
 import { Login, Register } from "../pages/auth";
@@ -20,8 +20,11 @@ import { LogisticsPage } from "../pages/log/LogisticsPage";
 import { AdminLayout } from "./AdminLayout";
 import { EmployeesPage } from "../pages/admin/EmployeesPage";
 import { AddEmployeePage } from "../pages/admin/AddEmployeePage";
-import { ReportsPage } from "../pages/admin/ReportsPage";
 import { EditEmployee } from "../pages/admin/EditEmployee";
+import { ReportsLayout } from "./ReportsLayout";
+import { TopProductsPage } from "../pages/admin/reports/TopProductsPage";
+import { TopClientsRevenuePage } from "../pages/admin/reports/TopClientsRevenuePage";
+import { TopClientsSalesPage } from "../pages/admin/reports/TopClientsSalesPage";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -90,8 +93,15 @@ export default function AppRoutes() {
                         <Route path="/admin" element={<AdminLayout />} >
                             <Route index element={<EmployeesPage />} />
                             <Route path="add-employee" element={<AddEmployeePage />} />
-                            <Route path="reports" element={<ReportsPage />} />
                             <Route path="employee/:id" element={<EditEmployee />} />
+                            <Route path="reports" element={<ReportsLayout />}>
+                                <Route path="top-products" element={<TopProductsPage />} />
+                                <Route path="top-clients-revenue" element={<TopClientsRevenuePage />} />
+                                <Route path="top-clients-sales" element={<TopClientsSalesPage />} />
+                                {/*<Route path="top-clients-orders" element={<TopClientsOrdersPage />} />
+                                <Route path="top-clients-inventory" element={<TopClientsInventoryPage />} /> */}
+                                <Route index element={<Typography>Select a report from the menu</Typography>} />
+                            </Route>
                         </Route>
                         <Route path="/*" element={<Navigate to="/admin" replace />} />
                     </>

@@ -6,6 +6,7 @@ import purchasesSlice from "../features/purchase/purchaseSlice";
 import modSlice from "../features/mod/modSlice";
 import logSlice from "../features/log/logSlice";
 import adminSlice from "../features/admin/adminSlice";
+import reportsSlice from "../features/admin/reportsSlice";
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
         mod: modSlice,
         log: logSlice,
         admin: adminSlice,
+        reports: reportsSlice,
     },
     devTools: import.meta.env.MODE !== "production",
 });

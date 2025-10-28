@@ -11,3 +11,29 @@ export interface AddEmployeeDTO {
     password: string;
     roleId: number;
 }
+
+export interface TopItem {
+    itemId: number;
+    itemName: string;
+    quantitySold: number;
+}
+
+export interface ReportsState {
+    topProducts: TopItem[];
+    topSellers: TopClientRevenue[];
+    topSellersItems: TopSellerItems[];
+    loading: boolean;
+    error: string | null;
+}
+
+export interface TopClientRevenue {
+    sellerId: number;
+    sellerName: string;
+    totalEarnings: number;
+}
+
+export interface TopSellerItems {
+    sellerId: number;
+    sellerName: string;
+    totalItemsSold: number;
+}
