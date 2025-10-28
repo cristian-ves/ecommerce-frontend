@@ -15,6 +15,12 @@ import { SellLayout } from "./SellLayout";
 import { EditItem } from "../pages/user/EditItem";
 import { ModLayout } from "./ModLayout";
 import { ItemRequests, Bans } from "../pages/mod";
+import { LogLayout } from "./LogLayout";
+import { LogisticsPage } from "../pages/log/LogisticsPage";
+import { AdminLayout } from "./AdminLayout";
+import { EmployeesPage } from "../pages/admin/EmployeesPage";
+import { AddEmployeePage } from "../pages/admin/AddEmployeePage";
+import { ReportsPage } from "../pages/admin/ReportsPage";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -70,10 +76,27 @@ export default function AppRoutes() {
                         <Route path="/*" element={<Navigate to="/mod" replace />} />
 
                     </>
+                ) : user.role.id === 3 ? (
+                    <>
+                        <Route path="/log" element={<LogLayout />}>
+                            <Route index element={<LogisticsPage />} />
+                        </Route>
+                        <Route path="/*" element={<Navigate to="/log" replace />} />
+
+                    </>
+                ) : user.role.id == 1 ? (
+                    <>
+                        <Route path="/admin" element={<AdminLayout />} >
+                            <Route index element={<EmployeesPage />} />
+                            <Route path="add-employee" element={<AddEmployeePage />} />
+                            <Route path="reports" element={<ReportsPage />} />
+                        </Route>
+                        <Route path="/*" element={<Navigate to="/admin" replace />} />
+                    </>
+                ) : (
+                    <Route path="/process" element={<h1>Working on it...</h1>} />
                 )
-                    : (
-                        <Route path="/process" element={<h1>Working on it...</h1>} />
-                    )}
+                }
             </Routes>
         </Box>
     );

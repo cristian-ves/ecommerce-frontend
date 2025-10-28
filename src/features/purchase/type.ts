@@ -37,6 +37,6 @@ export interface PurchaseDTO {
 export interface ItemPurchasedDTO {
     itemId: number;
     userId: number;
-    purhcaseId: number;
+    purchaseId: number;
     quantity: number;
 }

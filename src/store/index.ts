@@ -4,6 +4,7 @@ import itemsSlice from "../features/items/itemsSlice";
 import cartSlice from "../features/cart/cartSlice";
 import purchasesSlice from "../features/purchase/purchaseSlice";
 import modSlice from "../features/mod/modSlice";
+import logSlice from "../features/log/logSlice";
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         cart: cartSlice,
         purchases: purchasesSlice,
         mod: modSlice,
+        log: logSlice,
     },
     devTools: import.meta.env.MODE !== "production",
 });
