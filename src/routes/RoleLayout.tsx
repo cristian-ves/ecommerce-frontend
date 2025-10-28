@@ -48,7 +48,7 @@ export const RoleLayout: React.FC<RoleLayoutProps> = ({
 
                     <Box display={'flex'} alignItems={'center'} gap={3}>
                         {user && (
-                            <Typography variant="subtitle1">
+                            <Typography variant="subtitle1" color="secondary">
                                 Hello, {user.name} {roleLabel ? `(${roleLabel})` : ""}
                             </Typography>
                         )}

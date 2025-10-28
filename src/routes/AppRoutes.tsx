@@ -21,6 +21,7 @@ import { AdminLayout } from "./AdminLayout";
 import { EmployeesPage } from "../pages/admin/EmployeesPage";
 import { AddEmployeePage } from "../pages/admin/AddEmployeePage";
 import { ReportsPage } from "../pages/admin/ReportsPage";
+import { EditEmployee } from "../pages/admin/EditEmployee";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -90,6 +91,7 @@ export default function AppRoutes() {
                             <Route index element={<EmployeesPage />} />
                             <Route path="add-employee" element={<AddEmployeePage />} />
                             <Route path="reports" element={<ReportsPage />} />
+                            <Route path="employee/:id" element={<EditEmployee />} />
                         </Route>
                         <Route path="/*" element={<Navigate to="/admin" replace />} />
                     </>
