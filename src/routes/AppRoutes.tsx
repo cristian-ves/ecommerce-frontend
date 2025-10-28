@@ -25,6 +25,8 @@ import { ReportsLayout } from "./ReportsLayout";
 import { TopProductsPage } from "../pages/admin/reports/TopProductsPage";
 import { TopClientsRevenuePage } from "../pages/admin/reports/TopClientsRevenuePage";
 import { TopClientsSalesPage } from "../pages/admin/reports/TopClientsSalesPage";
+import { TopClientsOrdersPage } from "../pages/admin/reports/TopClientOrdersPage";
+import { TopClientsProductsPage } from "../pages/admin/reports/TopClientsProducstsPage";
 
 export default function AppRoutes() {
     const dispatch = useAppDispatch();
@@ -98,8 +100,8 @@ export default function AppRoutes() {
                                 <Route path="top-products" element={<TopProductsPage />} />
                                 <Route path="top-clients-revenue" element={<TopClientsRevenuePage />} />
                                 <Route path="top-clients-sales" element={<TopClientsSalesPage />} />
-                                {/*<Route path="top-clients-orders" element={<TopClientsOrdersPage />} />
-                                <Route path="top-clients-inventory" element={<TopClientsInventoryPage />} /> */}
+                                <Route path="top-clients-orders" element={<TopClientsOrdersPage />} />
+                                <Route path="top-clients-inventory" element={<TopClientsProductsPage />} />
                                 <Route index element={<Typography>Select a report from the menu</Typography>} />
                             </Route>
                         </Route>

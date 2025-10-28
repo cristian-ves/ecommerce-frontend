@@ -2,6 +2,8 @@ import apiInstance from "../../api/axiosInstance";
 import type { User } from "../auth";
 import type {
     AddEmployeeDTO,
+    TopClientOrders,
+    TopClientProducts,
     TopClientRevenue,
     TopItem,
     TopSellerItems,
@@ -63,6 +65,28 @@ export const fetchTopSellersItems = async (
         {
             params: { startDate, endDate },
         }
+    );
+    return data;
+};
+
+export const fetchTopClientsOrders = async (
+    startDate: string,
+    endDate: string
+): Promise<TopClientOrders[]> => {
+    const { data } = await apiInstance.get<TopClientOrders[]>(
+        `/purchases/reports/top-clients-orders`,
+        {
+            params: { startDate, endDate },
+        }
+    );
+    return data;
+};
+
+export const fetchTopClientsProducts = async (): Promise<
+    TopClientProducts[]
+> => {
+    const { data } = await apiInstance.get<TopClientProducts[]>(
+        "/items/top-users-items"
     );
     return data;
 };

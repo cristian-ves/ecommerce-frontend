@@ -4,12 +4,16 @@ import {
     type PayloadAction,
 } from "@reduxjs/toolkit";
 import {
+    fetchTopClientsOrders,
+    fetchTopClientsProducts,
     fetchTopClientsRevenue,
     fetchTopProducts,
     fetchTopSellersItems,
 } from "./";
 import type {
     ReportsState,
+    TopClientOrders,
+    TopClientProducts,
     TopClientRevenue,
     TopItem,
     TopSellerItems,
@@ -19,6 +23,8 @@ const initialState: ReportsState = {
     topProducts: [],
     topSellers: [],
     topSellersItems: [],
+    topClientsOrders: [],
+    topClientsProducts: [],
     loading: false,
     error: null,
 };
@@ -74,6 +80,37 @@ export const fetchTopSellersItemsThunk = createAsyncThunk<
     }
 );
 
+export const fetchTopClientsOrdersThunk = createAsyncThunk<
+    TopClientOrders[],
+    { startDate: string; endDate: string },
+    { rejectValue: string }
+>(
+    "reports/fetchTopClientsOrders",
+    async ({ startDate, endDate }, { rejectWithValue }) => {
+        try {
+            return await fetchTopClientsOrders(startDate, endDate);
+        } catch (err: any) {
+            return rejectWithValue(
+                err.response?.data || "Failed to fetch top clients orders"
+            );
+        }
+    }
+);
+
+export const fetchTopClientsProductsThunk = createAsyncThunk<
+    TopClientProducts[],
+    void,
+    { rejectValue: string }
+>("reports/fetchTopClientsProducts", async (_, { rejectWithValue }) => {
+    try {
+        return await fetchTopClientsProducts();
+    } catch (err: any) {
+        return rejectWithValue(
+            err.response?.data || "Failed to fetch top clients products"
+        );
+    }
+});
+
 const reportsSlice = createSlice({
     name: "reports",
     initialState,
@@ -106,6 +143,17 @@ const reportsSlice = createSlice({
                 fetchTopSellersItemsThunk.fulfilled,
                 (state, action: PayloadAction<TopSellerItems[]>) => {
                     state.topSellersItems = action.payload;
+                    state.loading = false;
+                }
+            )
+            .addCase(fetchTopClientsOrdersThunk.fulfilled, (state, action) => {
+                state.topClientsOrders = action.payload;
+                state.loading = false;
+            })
+            .addCase(
+                fetchTopClientsProductsThunk.fulfilled,
+                (state, action: PayloadAction<TopClientProducts[]>) => {
+                    state.topClientsProducts = action.payload;
                     state.loading = false;
                 }
             );

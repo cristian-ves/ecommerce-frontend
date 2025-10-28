@@ -22,6 +22,8 @@ export interface ReportsState {
     topProducts: TopItem[];
     topSellers: TopClientRevenue[];
     topSellersItems: TopSellerItems[];
+    topClientsOrders: TopClientOrders[];
+    topClientsProducts: TopClientProducts[];
     loading: boolean;
     error: string | null;
 }
@@ -36,4 +38,16 @@ export interface TopSellerItems {
     sellerId: number;
     sellerName: string;
     totalItemsSold: number;
+}
+
+export interface TopClientOrders {
+    userId: number;
+    userName: string;
+    totalOrder: number;
+}
+
+export interface TopClientProducts {
+    userId: number;
+    userName: string;
+    totalProducts: number;
 }
