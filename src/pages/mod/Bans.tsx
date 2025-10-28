@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchCommonUsersThunk, type UserManager } from "../../features/mod";
+import { fetchCommonUsersThunk} from "../../features/mod";
 import { UserTable } from "../../components/mod/UserTable";
 
 export const Bans = () => {

@@ -6,7 +6,6 @@ import {
 
 import type { AuthState, User, AuthResponse } from "./";
 import * as api from "./";
-import { loadCart } from "../cart";
 
 const initialState: AuthState = {
     user: null,

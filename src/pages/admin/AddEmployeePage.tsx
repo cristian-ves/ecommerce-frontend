@@ -7,8 +7,6 @@ import {
     TextField,
     Typography,
     Paper,
-    FormControlLabel,
-    Switch,
 } from "@mui/material";
 import { useAppDispatch } from "../../store/hooks";
 import { addEmployeeThunk } from "../../features/admin/adminSlice";

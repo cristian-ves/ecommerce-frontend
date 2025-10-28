@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Box, AppBar, Toolbar, Typography, Button, Stack } from "@mui/material";
+import { Box, AppBar, Toolbar, Typography, Button} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../features/auth";
 

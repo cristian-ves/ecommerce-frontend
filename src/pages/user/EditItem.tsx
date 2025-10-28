@@ -33,7 +33,7 @@ export const EditItem = () => {
                 image: item.image || "",
                 price: item.price || "",
                 stock: item.stock || 1,
-                isNew: item.isNew ?? true,
+                new: item.new ?? true,
                 category: item.category || null,
             });
         }
@@ -136,9 +136,9 @@ export const EditItem = () => {
             <TextField
                 select
                 label="Condition"
-                value={formData.isNew ? "new" : "used"}
+                value={formData.new ? "new" : "used"}
                 onChange={(e) =>
-                    handleChange("isNew", e.target.value === "new")
+                    handleChange("new", e.target.value === "new")
                 }
             >
                 <MenuItem value="new">Brand new</MenuItem>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiInstance = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "https://embryoid-appetizingly-sullivan.ngrok-free.dev",
 });
 
 apiInstance.interceptors.request.use((config) => {

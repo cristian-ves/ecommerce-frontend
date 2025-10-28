@@ -38,7 +38,7 @@ export const useLogistics = () => {
         if (!selectedPurchase || !newDate) return;
 
         try {
-            const updated = await dispatch(
+            await dispatch(
                 updateDeliveryDateThunk({
                     purchaseId: selectedPurchase,
                     deliveryDate: newDate,
