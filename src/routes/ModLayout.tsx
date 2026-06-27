@@ -3,7 +3,7 @@ import { RoleLayout } from "./RoleLayout";
 
 export const ModLayout = () => {
     const navItems = [
-        { label: "Items Request", path: "/mod", icon: <HomeIcon /> },
+        { label: "Item Request", path: "/mod", icon: <HomeIcon />, end: true },
         { label: "Bans", path: "/mod/bans", icon: <Block /> },
     ];
 

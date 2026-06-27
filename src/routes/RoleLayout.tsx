@@ -1,5 +1,6 @@
-import { Outlet, NavLink } from "react-router-dom";
-import { Box, AppBar, Toolbar, Typography, Button, Stack } from "@mui/material";
+import { Link, Outlet } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Box, AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../features/auth";
 
@@ -7,6 +8,7 @@ interface NavItem {
     label: string;
     path: string;
     icon: React.ReactNode;
+    end?: boolean; // true means exact match, false/omitted means matches sub-paths too
 }
 
 interface RoleLayoutProps {
@@ -20,20 +22,24 @@ export const RoleLayout: React.FC<RoleLayoutProps> = ({
 }) => {
     const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
+    const location = useLocation();
 
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.secondary", display: "flex", flexDirection: "column" }}>
             <AppBar position="sticky" sx={{ bgcolor: "background.paper", boxShadow: '0 8px 16px rgba(0,0,0,0.07)' }}>
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Box sx={{ display: "flex", gap: 2 }}>
-                        {navItems.map((item) => (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                end
-                                style={{ textDecoration: "none" }}
-                            >
-                                {({ isActive }) => (
+                        {navItems.map((item) => {
+                            const isActive = item.end
+                                ? location.pathname === item.path
+                                : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+
+                            return (
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    style={{ textDecoration: "none" }}
+                                >
                                     <Button
                                         startIcon={item.icon}
                                         variant={isActive ? "contained" : "text"}
@@ -41,9 +47,9 @@ export const RoleLayout: React.FC<RoleLayoutProps> = ({
                                     >
                                         {item.label}
                                     </Button>
-                                )}
-                            </NavLink>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </Box>
 
                     <Box display={'flex'} alignItems={'center'} gap={3}>

@@ -1,16 +1,8 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loadMyItems, type Item } from "../../features/items";
-import {
-    Box,
-    Card,
-    CardContent,
-    CardMedia,
-    Typography,
-    IconButton,
-} from "@mui/material";
-import { ItemInfo } from "../../components/items";
-import EditIcon from "@mui/icons-material/Edit";
+import { Box } from "@mui/material";
+import { ItemCard } from "../../components/items";
 import { useNavigate } from "react-router-dom";
 
 export const Sell = () => {
@@ -26,12 +18,10 @@ export const Sell = () => {
     }, [dispatch, user]);
 
     const handleEdit = (item: Item) => {
-        navigate(`/user/sell/item/${item.id}`, { state: { item } })
-    }
+        navigate(`/user/sell/item/${item.id}`, { state: { item } });
+    };
 
     return (
-
-
         <Box
             sx={{
                 flex: 1,
@@ -43,48 +33,12 @@ export const Sell = () => {
             }}
         >
             {myItems.map((item) => (
-                <Card
+                <ItemCard
                     key={item.id}
-                    sx={{
-                        width: 280,
-                        height: 500,
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        position: "relative",
-                    }}
-                >
-                    <IconButton
-                        size="small"
-                        sx={{
-                            position: "absolute",
-                            top: 8,
-                            right: 8,
-                            bgcolor: "background.paper",
-                            boxShadow: 1,
-                            "&:hover": { bgcolor: "grey.100" },
-                        }}
-                        onClick={() => { handleEdit(item) }}
-                    >
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-
-                    <CardMedia
-                        component="img"
-                        image={item.image}
-                        alt={item.name}
-                        sx={{
-                            height: 180,
-                            aspectRatio: "1 / 1",
-                            objectFit: "cover",
-                        }}
-                    />
-
-                    <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography variant="h6">{item.name}</Typography>
-                        <ItemInfo item={item} />
-                    </CardContent>
-                </Card>
+                    item={item}
+                    isMine={true}
+                    onEdit={handleEdit}
+                />
             ))}
         </Box>
     );

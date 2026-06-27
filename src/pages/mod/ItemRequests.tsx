@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { acceptItemThunk, getItemRequestsThunk, rejectItemThunk } from "../../features/mod";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ItemRequestCard } from "../../components/mod/ItemRequestCard";
 import { useSnackbar } from "notistack";
 
@@ -36,17 +36,31 @@ export const ItemRequests = () => {
         }
     };
 
-
     return (
         <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" }}>
-            {items.map(item => (
-                <ItemRequestCard
-                    key={item.id}
-                    item={item}
-                    onAccept={handleAccept}
-                    onReject={handleReject}
-                />
-            ))}
+            <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start", gap: 2 }}>
+                {items.length === 0 ? (
+
+                    <div>
+                        <Typography variant="h6" fontWeight="medium" gutterBottom>
+                            No Active Item Requests
+                        </Typography>
+                        <Typography variant="body2">
+                            There are no active item requests at this moment.
+                        </Typography>
+                    </div>
+                ) : (
+                    items.map(item => (
+                        <ItemRequestCard
+                            key={item.id}
+                            item={item}
+                            onAccept={handleAccept}
+                            onReject={handleReject}
+                        />
+                    ))
+                )}
+            </Box>
         </Box>
     );
+
 };

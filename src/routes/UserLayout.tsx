@@ -8,7 +8,7 @@ export const UserRoutes = () => {
     const { items } = useAppSelector((state) => state.cart);
 
     const navItems = [
-        { label: "Home", path: "/user", icon: <HomeIcon /> },
+        { label: "Home", path: "/user", icon: <HomeIcon />, end: true },
         { label: "Buy", path: "/user/buy", icon: <FaShoppingBag /> },
         { label: "Sell", path: "/user/sell", icon: <FaDollarSign /> },
         { label: `Cart (${items.length})`, path: "/user/cart", icon: <ShoppingCartIcon /> },

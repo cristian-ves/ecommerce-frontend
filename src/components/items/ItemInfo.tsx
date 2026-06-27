@@ -3,15 +3,21 @@ import type { Item } from "../../features/items";
 import { RatingStars } from "./";
 import { useAppDispatch } from "../../store/hooks";
 import { showReviewModal } from "../../helper/showReviewModal";
+import { enqueueSnackbar } from "notistack";
 
 interface ItemInfoProps {
     item: Item;
+    userId?: number;
 }
 
-export const ItemInfo = ({ item }: ItemInfoProps) => {
+export const ItemInfo = ({ item, userId }: ItemInfoProps) => {
     const dispatch = useAppDispatch();
 
     const handleReview = () => {
+        if (userId == item.user.id) {
+            enqueueSnackbar(`${item.name} can't be rated, it belongs to you`, { variant: "error" })
+            return;
+        }
         showReviewModal(item.id, dispatch);
     };
 
