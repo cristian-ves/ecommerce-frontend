@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import mainImage from './assets/main.png';
 import { AppInfo } from './components/main/AppInfo';
 
