@@ -36,8 +36,8 @@ export const Sell = () => {
                 <ItemCard
                     key={item.id}
                     item={item}
-                    isMine={true}
                     onEdit={handleEdit}
+                    isShowingButton={false}
                 />
             ))}
         </Box>

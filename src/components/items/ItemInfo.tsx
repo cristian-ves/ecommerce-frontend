@@ -3,21 +3,17 @@ import type { Item } from "../../features/items";
 import { RatingStars } from "./";
 import { useAppDispatch } from "../../store/hooks";
 import { showReviewModal } from "../../helper/showReviewModal";
-import { enqueueSnackbar } from "notistack";
 
 interface ItemInfoProps {
     item: Item;
-    userId?: number;
+    isMine: boolean;
 }
 
-export const ItemInfo = ({ item, userId }: ItemInfoProps) => {
+export const ItemInfo = ({ item, isMine }: ItemInfoProps) => {
     const dispatch = useAppDispatch();
 
     const handleReview = () => {
-        if (userId == item.user.id) {
-            enqueueSnackbar(`${item.name} can't be rated, it belongs to you`, { variant: "error" })
-            return;
-        }
+
         showReviewModal(item.id, dispatch);
     };
 
@@ -42,20 +38,21 @@ export const ItemInfo = ({ item, userId }: ItemInfoProps) => {
 
             <RatingStars rating={item.rating} rates={item.rates} />
 
-            <Typography
-                component="span"
-                onClick={handleReview}
-                sx={{
-                    mt: 1,
-                    ml: 1,
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                    "&:hover": { textDecoration: "underline" },
-                    color: "primary.main",
-                }}
-            >
-                Review
-            </Typography>
+            {!isMine && (
+                <Typography
+                    component="span"
+                    onClick={handleReview}
+                    sx={{
+                        mt: 1,
+                        ml: 1,
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                        color: "primary.main",
+                    }}
+                >
+                    Review
+                </Typography>
+            )}
         </Box>
     );
 };
