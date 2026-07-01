@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import Swal from "sweetalert2";
@@ -134,13 +134,35 @@ export const Cards = () => {
             />
 
             {showForm && (
-                <CardForm
-                    cardData={cardData}
-                    saveCard={saveCard}
-                    onChange={handleChange}
-                    onToggleSave={setSaveCard}
-                    onHide={() => setShowForm(false)}
-                />
+                <>
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            width: "100%",
+                            maxWidth: 500,
+                            px: 2,
+                            py: 1.5,
+                            borderRadius: 2,
+                            border: "1px solid",
+                            borderColor: "warning.light",
+                            backgroundColor: "#FFFBF0",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1.5,
+                        }}
+                    >
+                        <Typography variant="body2" color="text.secondary">
+                            <strong>Demo only</strong> — this is not a real payment form. Enter any values (e.g. 1234 1234 1234 1234, 12/29, 123).
+                        </Typography>
+                    </Paper>
+                    <CardForm
+                        cardData={cardData}
+                        saveCard={saveCard}
+                        onChange={handleChange}
+                        onToggleSave={setSaveCard}
+                        onHide={() => setShowForm(false)}
+                    />
+                </>
             )}
 
             <Divider sx={{ width: "100%", maxWidth: 500 }} />

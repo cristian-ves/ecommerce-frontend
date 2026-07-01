@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 import App from "../App";
 import { Login, Register } from "../pages/auth";
@@ -29,23 +29,33 @@ import { TopClientsOrdersPage } from "../pages/admin/reports/TopClientOrdersPage
 import { TopClientsProductsPage } from "../pages/admin/reports/TopClientsProducstsPage";
 
 export default function AppRoutes() {
+
+    console.log("localStorage lastPath on mount:", localStorage.getItem("lastPath"));
+
     const dispatch = useAppDispatch();
-    const { user } = useAppSelector((state) => state.auth);
+    const { user, loading } = useAppSelector((state) => state.auth);
+
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
         if (token && !user) {
             (async () => {
                 const resultAction = await dispatch(checkAuth());
-
                 if (checkAuth.fulfilled.match(resultAction)) {
-                    const user = resultAction.payload;
-                    await dispatch(loadCart(user.id));
+                    const loggedUser = resultAction.payload;
+                    await dispatch(loadCart(loggedUser.id));
                 }
-
             })();
         }
-    }, [user]);
+    }, []);
+
+    if (token && loading) {
+        return (
+            <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <Box sx={{ minHeight: "100vh" }}>

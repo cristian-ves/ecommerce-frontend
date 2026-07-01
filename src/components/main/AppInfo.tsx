@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { SiReact, SiSpringboot } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
+import { DemoAccounts } from "./DemoAccounts";
 
 export const AppInfo = () => {
     const navigate = useNavigate();
@@ -33,6 +34,13 @@ export const AppInfo = () => {
                     Register
                 </Button>
             </Box>
+
+
+            <Typography variant="body2">
+                Or
+            </Typography>
+
+            <DemoAccounts />
         </Box>
     );
 };

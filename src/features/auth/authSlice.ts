@@ -10,7 +10,7 @@ import * as api from "./";
 const initialState: AuthState = {
     user: null,
     token: null,
-    loading: false,
+    loading: !!localStorage.getItem("token"),
     error: null,
 };
 

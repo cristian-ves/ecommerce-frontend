@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { loginUser } from '../../features/auth';
 import { useNavigate } from 'react-router-dom';
 import { loadCart } from '../../features/cart/cartSlice';
+import { DemoAccounts } from '../../components/main/DemoAccounts';
 
 export const Login = () => {
 
@@ -35,10 +36,9 @@ export const Login = () => {
 
 
     return (
-        <Container maxWidth="sm" sx={{ display: 'flex', minHeight: '100vh' }}>
+        <Container maxWidth="sm" sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column', justifyContent: 'center' }}>
             <Box
                 sx={{
-                    margin: 'auto',
                     width: '100%',
                 }}
             >
@@ -57,6 +57,7 @@ export const Login = () => {
                     </Button>
                 </form>
             </Box>
+            <DemoAccounts />
         </Container>
     );
 };
