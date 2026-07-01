@@ -152,7 +152,7 @@ export const Cards = () => {
                         }}
                     >
                         <Typography variant="body2" color="text.secondary">
-                            <strong>Demo only</strong> — this is not a real payment form. Enter any values (e.g. 1234 1234 1234 1234, 12/29, 123).
+                            <strong>Demo only</strong> — this is not a real payment form. Enter any values (for example 1234 1234 1234 1234, 12/29, 123).
                         </Typography>
                     </Paper>
                     <CardForm
