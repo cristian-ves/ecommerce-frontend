@@ -30,8 +30,6 @@ import { TopClientsProductsPage } from "../pages/admin/reports/TopClientsProducs
 
 export default function AppRoutes() {
 
-    console.log("localStorage lastPath on mount:", localStorage.getItem("lastPath"));
-
     const dispatch = useAppDispatch();
     const { user, loading } = useAppSelector((state) => state.auth);
 
