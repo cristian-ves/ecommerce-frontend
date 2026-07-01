@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography, CircularProgress, Paper } from "@mui/material";
+import { Box, Button, Typography, CircularProgress, Paper } from "@mui/material";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { loginUser } from "../../features/auth";
@@ -70,7 +70,7 @@ export const DemoAccounts = () => {
                 ))}
             </Box>
             <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 2 }}>
-                Demo only — enter any values where forms require it (e.g. payment details)
+                Demo only — enter any values where forms require it (for example payment details)
             </Typography>
         </Paper>
     );
