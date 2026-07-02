@@ -9,6 +9,7 @@ import {
     TextField,
 } from "@mui/material";
 import ReportTable from "../../../components/admin/ReportTable";
+import { getDefaultDates } from "../../../helper/reportsDate";
 
 export const TopClientsOrdersPage = () => {
     const dispatch = useAppDispatch();
@@ -16,8 +17,9 @@ export const TopClientsOrdersPage = () => {
         (state) => state.reports
     );
 
-    const [startDate, setStartDate] = useState("2025-10-01");
-    const [endDate, setEndDate] = useState("2025-10-28");
+    const { start, end } = getDefaultDates();
+    const [startDate, setStartDate] = useState(start);
+    const [endDate, setEndDate] = useState(end);
 
     const handleFetch = () => {
         dispatch(fetchTopClientsOrdersThunk({ startDate, endDate }));

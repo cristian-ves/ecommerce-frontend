@@ -3,6 +3,7 @@ import type { User } from "../auth";
 export interface AdminState {
     employees: User[];
     error: string | null;
+    loading: boolean;
 }
 
 export interface AddEmployeeDTO {

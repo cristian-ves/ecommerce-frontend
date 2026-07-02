@@ -10,6 +10,7 @@ import type { User } from "../auth";
 const initialState: AdminState = {
     employees: [],
     error: null,
+    loading: false,
 };
 
 export const fetchEmployeesThunk = createAsyncThunk<
@@ -58,12 +59,20 @@ const adminSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(fetchEmployeesThunk.pending, (state) => {
+                state.loading = true;
+            })
             .addCase(
                 fetchEmployeesThunk.fulfilled,
                 (state, action: PayloadAction<User[]>) => {
                     state.employees = action.payload;
+                    state.loading = false;
                 }
             )
+            .addCase(fetchEmployeesThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
             .addCase(
                 updateEmployeeThunk.fulfilled,
                 (state, action: PayloadAction<User>) => {

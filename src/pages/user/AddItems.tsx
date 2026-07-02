@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     Box,
     Button,
@@ -9,6 +10,7 @@ import {
     Select,
     FormHelperText,
     type SelectChangeEvent,
+    CircularProgress,
 } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { useAddItemForm } from "../../hooks/useAddItemForm";
@@ -30,40 +32,40 @@ export const AddItems = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
     const navigate = useNavigate();
-
     const { formData, errors, handleChange, validateForm } = useAddItemForm(CATEGORIES);
+
+    const [submitting, setSubmitting] = useState(false);
 
     const handleAddItem = async () => {
         if (!validateForm()) return;
-
         if (!user) return;
 
+        setSubmitting(true);
         try {
-            await dispatch(
-                addNewItem({
-                    ...formData,
-                    user,
-                    price: Number(formData.price),
-                    stock: Number(formData.stock),
-                    category: formData.category!,
-                })
-            ).unwrap();
+            await dispatch(addNewItem({
+                ...formData,
+                user,
+                price: Number(formData.price),
+                stock: Number(formData.stock),
+                category: formData.category!,
+            })).unwrap();
 
             Swal.fire({
                 icon: "success",
                 title: "Item added!",
                 text: `${formData.name} has been added successfully.`,
-            }).then(() => {
-                navigate("/user/sell")
-            });
+            }).then(() => navigate("/user/sell"));
         } catch (err: any) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: err.message || "Failed to add item",
             });
+        } finally {
+            setSubmitting(false);
         }
     };
+
 
     return (
         <Box
@@ -149,8 +151,14 @@ export const AddItems = () => {
                 {errors.category && <FormHelperText>{errors.category}</FormHelperText>}
             </FormControl>
 
-            <Button variant="contained" color="primary" onClick={handleAddItem}>
-                Add Item
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddItem}
+                disabled={submitting}
+                startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
+            >
+                {submitting ? "Adding..." : "Add Item"} // CHANGED
             </Button>
         </Box>
     );

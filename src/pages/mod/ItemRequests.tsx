@@ -1,21 +1,18 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { acceptItemThunk, getItemRequestsThunk, rejectItemThunk } from "../../features/mod";
-import { Box, Typography } from "@mui/material";
-import { ItemRequestCard } from "../../components/mod/ItemRequestCard";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 
+import { acceptItemThunk, getItemRequestsThunk, rejectItemThunk } from "../../features/mod";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { ItemRequestCard } from "../../components/mod/ItemRequestCard";
+
 export const ItemRequests = () => {
-
     const dispatch = useAppDispatch();
-    const { items } = useAppSelector((state) => state.mod);
-
+    const { items, loading } = useAppSelector((state) => state.mod);
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-
         dispatch(getItemRequestsThunk());
-
     }, []);
 
     const handleAccept = async (id: number) => {
@@ -35,6 +32,12 @@ export const ItemRequests = () => {
             enqueueSnackbar("Failed to reject item", { variant: "error" });
         }
     };
+
+    if (loading) return (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+            <CircularProgress />
+        </Box>
+    );
 
     return (
         <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" }}>

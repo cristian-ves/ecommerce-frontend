@@ -3,13 +3,15 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchTopProductsThunk } from "../../../features/admin/reportsSlice";
 import { Typography, CircularProgress, Box, Button, TextField, Stack } from "@mui/material";
 import ReportTable from "../../../components/admin/ReportTable";
+import { getDefaultDates } from "../../../helper/reportsDate";
 
 export const TopProductsPage = () => {
     const dispatch = useAppDispatch();
     const { topProducts, loading, error } = useAppSelector((state) => state.reports);
 
-    const [startDate, setStartDate] = useState("2025-10-01");
-    const [endDate, setEndDate] = useState("2025-10-28");
+    const { start, end } = getDefaultDates();
+    const [startDate, setStartDate] = useState(start);
+    const [endDate, setEndDate] = useState(end);
 
     useEffect(() => {
         dispatch(fetchTopProductsThunk({ startDate, endDate }));

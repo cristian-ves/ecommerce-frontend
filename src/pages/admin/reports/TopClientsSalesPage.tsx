@@ -10,8 +10,9 @@ export const TopClientsSalesPage = () => {
         (state) => state.reports
     );
 
-    const [startDate, setStartDate] = useState("2025-10-01");
-    const [endDate, setEndDate] = useState("2025-10-28");
+    const { start, end } = getDefaultDates();
+    const [startDate, setStartDate] = useState(start);
+    const [endDate, setEndDate] = useState(end);
 
     const handleFetch = () => {
         dispatch(fetchTopSellersItemsThunk({ startDate, endDate }));

@@ -1,24 +1,15 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    IconButton,
-    Typography,
-} from "@mui/material";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchEmployeesThunk } from "../../features/admin/adminSlice";
-import type { User } from "../../features/auth";
-import EditIcon from '@mui/icons-material/Edit';
+import { Box, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+
+import { fetchEmployeesThunk } from "../../features/admin/adminSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import type { User } from "../../features/auth";
 
 export const EmployeesPage = () => {
     const dispatch = useAppDispatch();
-    const { employees } = useAppSelector((state) => state.admin);
+    const { employees, loading } = useAppSelector((state) => state.admin);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,19 +17,20 @@ export const EmployeesPage = () => {
     }, [dispatch]);
 
     const handleEdit = (user: User) => {
-
         navigate(`/admin/employee/${user.id}`, { state: { user } });
     };
 
-
     const sortedEmployees = [...employees].sort((a, b) => a.id - b.id);
+
+    if (loading) return (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+            <CircularProgress />
+        </Box>
+    );
 
     return (
         <TableContainer component={Paper} sx={{ padding: 2 }}>
-            <Typography variant="h5" gutterBottom>
-                Employees
-            </Typography>
-
+            <Typography variant="h5" gutterBottom>Employees</Typography>
             {sortedEmployees.length === 0 ? (
                 <Typography>No employees found.</Typography>
             ) : (
@@ -60,10 +52,7 @@ export const EmployeesPage = () => {
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.role.name}</TableCell>
                                 <TableCell>
-                                    <IconButton
-                                        color="primary"
-                                        onClick={() => handleEdit(user)}
-                                    >
+                                    <IconButton color="primary" onClick={() => handleEdit(user)}>
                                         <EditIcon />
                                     </IconButton>
                                 </TableCell>

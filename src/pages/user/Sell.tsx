@@ -1,25 +1,30 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { loadMyItems, type Item } from "../../features/items";
-import { Box } from "@mui/material";
-import { ItemCard } from "../../components/items";
+import { Box, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import { loadMyItems, type Item } from "../../features/items";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { ItemCard } from "../../components/items";
 
 export const Sell = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { user } = useAppSelector((state) => state.auth);
-    const { myItems } = useAppSelector((state) => state.items);
+    const { myItems, loading } = useAppSelector((state) => state.items);
 
     useEffect(() => {
-        if (user) {
-            dispatch(loadMyItems({ id: user.id }));
-        }
+        if (user) dispatch(loadMyItems({ id: user.id }));
     }, [dispatch, user]);
 
     const handleEdit = (item: Item) => {
         navigate(`/user/sell/item/${item.id}`, { state: { item } });
     };
+
+    if (loading) return (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+            <CircularProgress />
+        </Box>
+    );
 
     return (
         <Box

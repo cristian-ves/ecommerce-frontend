@@ -1,12 +1,13 @@
 import { useEffect } from "react";
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, CircularProgress, Paper, Typography } from "@mui/material";
+
+import { fetchCommonUsersThunk } from "../../features/mod";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchCommonUsersThunk} from "../../features/mod";
 import { UserTable } from "../../components/mod/UserTable";
 
 export const Bans = () => {
     const dispatch = useAppDispatch();
-    const { users } = useAppSelector((state) => state.mod);
+    const { users, loading } = useAppSelector((state) => state.mod);
 
     useEffect(() => {
         dispatch(fetchCommonUsersThunk());
@@ -14,6 +15,12 @@ export const Bans = () => {
 
     const unbannedUsers = users.filter((u) => !u.suspended);
     const bannedUsers = users.filter((u) => u.suspended);
+
+    if (loading) return (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+            <CircularProgress />
+        </Box>
+    );
 
     return (
         <Box sx={{ p: 3 }}>
