@@ -11,6 +11,7 @@ import {
     deleteItemFromCart,
     clearCart,
 } from "./";
+import type { Item } from "../items";
 
 const initialState: CartState = {
     items: [],
@@ -33,59 +34,44 @@ export const loadCart = createAsyncThunk<CartItem[], number>(
 
 export const addToCart = createAsyncThunk<
     void,
-    { userId: number; itemId: number }
->(
-    "cart/addToCart",
-    async ({ userId, itemId }, { rejectWithValue, dispatch }) => {
-        try {
-            await addItemToCart(userId, itemId);
-            dispatch(loadCart(userId));
-        } catch (err: any) {
-            return rejectWithValue(err.response?.data || "Failed to add item");
-        }
+    { userId: number; itemId: number; item?: Item }
+>("cart/addToCart", async ({ userId, itemId }, { rejectWithValue }) => {
+    try {
+        await addItemToCart(userId, itemId);
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to add item");
     }
-);
+});
 
 export const decrementFromCart = createAsyncThunk<
     void,
     { userId: number; itemId: number }
->(
-    "cart/decrementFromCart",
-    async ({ userId, itemId }, { rejectWithValue, dispatch }) => {
-        try {
-            await decrementItemFromCart(userId, itemId);
-            dispatch(loadCart(userId));
-        } catch (err: any) {
-            return rejectWithValue(
-                err.response?.data || "Failed to decrement item"
-            );
-        }
+>("cart/decrementFromCart", async ({ userId, itemId }, { rejectWithValue }) => {
+    try {
+        await decrementItemFromCart(userId, itemId);
+    } catch (err: any) {
+        return rejectWithValue(
+            err.response?.data || "Failed to decrement item"
+        );
     }
-);
+});
 
 export const removeFromCart = createAsyncThunk<
     void,
     { userId: number; itemId: number }
->(
-    "cart/removeFromCart",
-    async ({ userId, itemId }, { rejectWithValue, dispatch }) => {
-        try {
-            await deleteItemFromCart(userId, itemId);
-            dispatch(loadCart(userId));
-        } catch (err: any) {
-            return rejectWithValue(
-                err.response?.data || "Failed to delete item"
-            );
-        }
+>("cart/removeFromCart", async ({ userId, itemId }, { rejectWithValue }) => {
+    try {
+        await deleteItemFromCart(userId, itemId);
+    } catch (err: any) {
+        return rejectWithValue(err.response?.data || "Failed to delete item");
     }
-);
+});
 
 export const clearUserCart = createAsyncThunk<void, number>(
     "cart/clearUserCart",
-    async (userId, { rejectWithValue, dispatch }) => {
+    async (userId, { rejectWithValue }) => {
         try {
             await clearCart(userId);
-            dispatch(loadCart(userId));
         } catch (err: any) {
             return rejectWithValue(
                 err.response?.data || "Failed to clear cart"
@@ -99,6 +85,7 @@ const cartSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        // loadCart
         builder
             .addCase(loadCart.pending, (state) => {
                 state.loading = true;
@@ -116,26 +103,56 @@ const cartSlice = createSlice({
                 state.error = action.payload as string;
             });
 
+        // addToCart — optimistic
         builder
-            .addCase(addToCart.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(addToCart.fulfilled, (state) => {
-                state.loading = false;
+            .addCase(addToCart.pending, (state, action) => {
+                const { itemId, item } = action.meta.arg;
+                const existing = state.items.find((i) => i.item.id === itemId);
+                if (existing) {
+                    existing.quantity += 1;
+                } else if (item) {
+                    state.items.push({ item, quantity: 1 });
+                }
             })
             .addCase(addToCart.rejected, (state, action) => {
-                state.loading = false;
                 state.error = action.payload as string;
-            })
+            });
 
-            .addCase(removeFromCart.pending, (state) => {
-                state.loading = true;
+        // decrementFromCart
+        builder
+            .addCase(decrementFromCart.pending, (state, action) => {
+                const { itemId } = action.meta.arg;
+                const existing = state.items.find((i) => i.item.id === itemId);
+                if (existing) {
+                    if (existing.quantity <= 1) {
+                        state.items = state.items.filter(
+                            (i) => i.item.id !== itemId
+                        );
+                    } else {
+                        existing.quantity -= 1;
+                    }
+                }
             })
-            .addCase(removeFromCart.fulfilled, (state) => {
-                state.loading = false;
+            .addCase(decrementFromCart.rejected, (state, action) => {
+                state.error = action.payload as string;
+            });
+
+        // removeFromCart
+        builder
+            .addCase(removeFromCart.pending, (state, action) => {
+                const { itemId } = action.meta.arg;
+                state.items = state.items.filter((i) => i.item.id !== itemId);
             })
             .addCase(removeFromCart.rejected, (state, action) => {
-                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        // clearUserCart
+        builder
+            .addCase(clearUserCart.pending, (state) => {
+                state.items = [];
+            })
+            .addCase(clearUserCart.rejected, (state, action) => {
                 state.error = action.payload as string;
             });
     },

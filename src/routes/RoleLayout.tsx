@@ -8,7 +8,8 @@ interface NavItem {
     label: string;
     path: string;
     icon: React.ReactNode;
-    end?: boolean; // true means exact match, false/omitted means matches sub-paths too
+    end?: boolean;
+    bump?: boolean;
 }
 
 interface RoleLayoutProps {
@@ -43,7 +44,12 @@ export const RoleLayout: React.FC<RoleLayoutProps> = ({
                                     <Button
                                         startIcon={item.icon}
                                         variant={isActive ? "contained" : "text"}
-                                        sx={{ textTransform: "none", boxShadow: "none" }}
+                                        sx={{
+                                            textTransform: "none",
+                                            boxShadow: "none",
+                                            transform: item.bump ? "scale(1.15)" : "scale(1)",
+                                            transition: "transform 0.15s ease",
+                                        }}
                                     >
                                         {item.label}
                                     </Button>

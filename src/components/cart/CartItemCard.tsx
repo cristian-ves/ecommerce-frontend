@@ -8,9 +8,10 @@ interface Props {
     onIncrement: (cartItem: CartItem) => void;
     onDecrement: (cartItem: CartItem) => void;
     onRemove: (itemId: number) => void;
+    isMaxStock: boolean;
 }
 
-export const CartItemCard = ({ cartItem, onIncrement, onDecrement, onRemove }: Props) => (
+export const CartItemCard = ({ cartItem, onIncrement, onDecrement, onRemove, isMaxStock }: Props) => (
     <Paper
         sx={{
             display: "flex",
@@ -59,10 +60,16 @@ export const CartItemCard = ({ cartItem, onIncrement, onDecrement, onRemove }: P
 
                 <Typography>{cartItem.quantity}</Typography>
 
-                <CircleIconButton onClick={() => onIncrement(cartItem)}>
+                <CircleIconButton onClick={() => onIncrement(cartItem)} disabled={isMaxStock} >
                     <Add fontSize="small" />
                 </CircleIconButton>
             </Box>
+            {isMaxStock && (
+                <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                    Max stock reached
+                </Typography>
+            )}
         </Box>
+
     </Paper>
 );

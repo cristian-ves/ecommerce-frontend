@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { Box, Button, Card, CardContent, Typography, IconButton } from "@mui/material";
-import type { Item } from "../../features/items";
-import { ItemImage, ItemInfo } from ".";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { addToCart } from "../../features/cart";
-import { useSnackbar } from "notistack";
 import EditIcon from "@mui/icons-material/Edit";
+import { useSnackbar } from "notistack";
+
+import type { Item } from "../../features/items";
+import { addToCart } from "../../features/cart";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { ItemImage, ItemInfo } from ".";
 
 interface ItemCardProps {
     item: Item;
@@ -18,14 +20,15 @@ export const ItemCard = ({ item, onEdit, isShowingButton = true }: ItemCardProps
     const { items } = useAppSelector((state) => state.cart);
     const { enqueueSnackbar } = useSnackbar();
 
-    const isMine = user?.id === item.user.id;
+    const [optimisticAdded, setOptimisticAdded] = useState(false);
 
+    const isMine = user?.id === item.user.id;
     const alreadyInCart = items.some((cartItem) => cartItem.item.id === item.id);
 
     const handleAddToCart = () => {
         if (!user) return;
-
-        dispatch(addToCart({ userId: user.id, itemId: item.id }));
+        setOptimisticAdded(true);
+        dispatch(addToCart({ userId: user.id, itemId: item.id, item }));
         enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" });
     };
 
@@ -57,33 +60,27 @@ export const ItemCard = ({ item, onEdit, isShowingButton = true }: ItemCardProps
                     <EditIcon fontSize="small" />
                 </IconButton>
             )}
-
             <ItemImage src={item.image} alt={item.name} />
-
             <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6">{item.name}</Typography>
                 <ItemInfo item={item} isMine={isMine} />
             </CardContent>
-
-            {
-                isShowingButton && (
-
-                    <Box sx={{ padding: 1 }}>
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            onClick={handleAddToCart}
-                            disabled={item.stock <= 0 || user?.id === item.user.id || alreadyInCart}
-                        >
-                            {user?.id === item.user.id
-                                ? "Your Product"
-                                : alreadyInCart
-                                    ? "Already in Cart"
-                                    : "Add to Cart"}
-                        </Button>
-                    </Box>
-                )
-            }
+            {isShowingButton && (
+                <Box sx={{ padding: 1 }}>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={handleAddToCart}
+                        disabled={item.stock <= 0 || isMine || alreadyInCart || optimisticAdded}
+                    >
+                        {isMine
+                            ? "Your Product"
+                            : alreadyInCart || optimisticAdded
+                                ? "Already in Cart"
+                                : "Add to Cart"}
+                    </Button>
+                </Box>
+            )}
         </Card>
     );
 };

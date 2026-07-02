@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Paper, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import Swal from "sweetalert2";
@@ -26,6 +26,8 @@ export const Cards = () => {
     const { items } = useAppSelector((state) => state.cart);
     const navigate = useNavigate();
 
+    const [purchasing, setPurchasing] = useState(false);
+
     const { cardData, saveCard, setSaveCard, handleChange, validateCardForm } =
         useCardForm();
 
@@ -39,31 +41,34 @@ export const Cards = () => {
     );
 
     const handleConfirmPurchase = async () => {
-        if (showForm) {
-            if (!validateCardForm()) return;
+        setPurchasing(true);
 
+        if (showForm) {
+            if (!validateCardForm()) {
+                setPurchasing(false);
+                return;
+            }
             if (user) {
                 const resultAction = await dispatch(
                     saveCardThunk({ ...cardData, userId: user.id })
                 );
-
                 if (saveCardThunk.fulfilled.match(resultAction)) {
                     const id = resultAction.payload.id;
-
                     await dispatch(
                         purchaseThunk({
                             userId: user.id,
                             cardId: id,
-                            items: items.map((cartItem) => ({ quantity: cartItem.quantity, userId: user.id, itemId: cartItem.item.id })),
+                            items: items.map((cartItem) => ({
+                                quantity: cartItem.quantity,
+                                userId: user.id,
+                                itemId: cartItem.item.id,
+                            })),
                         })
                     );
-
-                    dispatch(resetItems())
+                    dispatch(resetItems());
                     dispatch(loadItems({ page: 0, size: ITEMS_TO_LOAD }));
                     dispatch(loadCart(user.id));
-
-                    navigate("/user/purchases")
-
+                    navigate("/user/purchases");
                     MySwal.fire({
                         icon: "success",
                         title: "Purchase Completed",
@@ -84,23 +89,22 @@ export const Cards = () => {
                 text: "Please select a saved card or add a new one.",
             });
         } else {
-
             if (user) {
-
                 await dispatch(
                     purchaseThunk({
                         userId: user.id,
                         cardId: Number(selectedCard),
-                        items: items.map((cartItem) => ({ quantity: cartItem.quantity, userId: user.id, itemId: cartItem.item.id })),
+                        items: items.map((cartItem) => ({
+                            quantity: cartItem.quantity,
+                            userId: user.id,
+                            itemId: cartItem.item.id,
+                        })),
                     })
                 );
-
-                dispatch(resetItems())
+                dispatch(resetItems());
                 dispatch(loadItems({ page: 0, size: ITEMS_TO_LOAD }));
                 dispatch(loadCart(user.id));
-
                 navigate("/user/purchases");
-
                 MySwal.fire({
                     icon: "success",
                     title: "Purchase Confirmed",
@@ -108,6 +112,8 @@ export const Cards = () => {
                 });
             }
         }
+
+        setPurchasing(false);
     };
 
 
@@ -176,9 +182,10 @@ export const Cards = () => {
                 color="primary"
                 sx={{ width: "100%", maxWidth: 300, mt: 1 }}
                 onClick={handleConfirmPurchase}
-                disabled={!selectedCard && !showForm}
+                disabled={(!selectedCard && !showForm) || purchasing}
+                startIcon={purchasing ? <CircularProgress size={16} color="inherit" /> : null}
             >
-                Confirm Purchase
+                {purchasing ? "Processing..." : "Confirm Purchase"}
             </Button>
         </Box>
     );

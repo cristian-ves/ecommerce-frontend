@@ -37,16 +37,7 @@ export const Cart = () => {
 
     const handleIncrement = (cartItem: CartItem) => {
         if (!user) return;
-        if (cartItem.item.stock - cartItem.quantity <= 0) {
-            MySwal.fire({
-                title: "Can't add to the cart, stock not available",
-                icon: "error",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#d32f2f",
-            });
-        } else {
-            dispatch(addToCart({ userId: user.id, itemId: cartItem.item.id }));
-        }
+        dispatch(addToCart({ userId: user.id, itemId: cartItem.item.id }));
     };
 
     const handleDecrement = (cartItem: CartItem) => {
@@ -105,6 +96,7 @@ export const Cart = () => {
                             onIncrement={() => handleIncrement(cartItem)}
                             onDecrement={() => handleDecrement(cartItem)}
                             onRemove={() => handleRemove(cartItem.item.id)}
+                            isMaxStock={cartItem.item.stock - cartItem.quantity <= 0}
                         />
                     ))}
             </Box>
