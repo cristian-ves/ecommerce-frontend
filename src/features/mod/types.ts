@@ -26,4 +26,5 @@ export interface ModState {
     items: ItemRequest[];
     loading: boolean;
     error: string | null;
+    banningId: number;
 }

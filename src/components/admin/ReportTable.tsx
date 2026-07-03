@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from "@mui/material";
 
 interface ReportRow {
     id: number;
@@ -10,9 +10,30 @@ interface ReportTableProps {
     data: ReportRow[];
     nameHeader: string;
     valueHeader: string;
+    loading?: boolean;
+    error?: string | null;
 }
 
-const ReportTable: React.FC<ReportTableProps> = ({ data, nameHeader, valueHeader }) => {
+const ReportTable = ({ data, nameHeader, valueHeader, loading = false, error }: ReportTableProps) => {
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', p: 4 }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (data.length === 0) return <></>;
+
+    if (!!error) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', p: 4 }}>
+                <Typography color="error">{error}</Typography>
+            </Box>
+        );
+    }
+
     return (
         <TableContainer component={Paper} sx={{ mt: 3 }}>
             <Table>

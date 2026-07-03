@@ -17,6 +17,7 @@ const initialState: ModState = {
     users: [],
     loading: false,
     error: null,
+    banningId: 0,
 };
 
 export const getItemRequestsThunk = createAsyncThunk<ItemRequest[], void>(
@@ -165,10 +166,18 @@ const modSlice = createSlice({
                 state.error = action.payload as string;
             });
 
-        builder.addCase(toggleBanThunk.fulfilled, (state, action) => {
-            const user = state.users.find((u) => u.id === action.payload);
-            if (user) user.suspended = !user.suspended;
-        });
+        builder
+            .addCase(toggleBanThunk.fulfilled, (state, action) => {
+                const user = state.users.find((u) => u.id === action.payload);
+                if (user) {
+                    user.suspended = !user.suspended;
+                }
+                state.banningId = 0;
+            })
+            .addCase(toggleBanThunk.pending, (state, action) => {
+                state.banningId = action.meta.arg;
+                state.error = null;
+            });
     },
 });
 

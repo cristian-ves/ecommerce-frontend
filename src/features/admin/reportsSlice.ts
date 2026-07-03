@@ -1,7 +1,9 @@
 import {
     createAsyncThunk,
     createSlice,
-    type PayloadAction,
+    isPending,
+    isFulfilled,
+    isRejected,
 } from "@reduxjs/toolkit";
 import {
     fetchTopClientsOrders,
@@ -111,52 +113,51 @@ export const fetchTopClientsProductsThunk = createAsyncThunk<
     }
 });
 
+const reportThunks = [
+    fetchTopProductsThunk,
+    fetchTopClientsRevenueThunk,
+    fetchTopSellersItemsThunk,
+    fetchTopClientsOrdersThunk,
+    fetchTopClientsProductsThunk,
+] as const;
+
 const reportsSlice = createSlice({
     name: "reports",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTopProductsThunk.pending, (state) => {
-                state.loading = true;
-                state.error = null;
+            .addCase(fetchTopProductsThunk.fulfilled, (state, action) => {
+                state.topProducts = action.payload;
             })
-            .addCase(
-                fetchTopProductsThunk.fulfilled,
-                (state, action: PayloadAction<TopItem[]>) => {
-                    state.topProducts = action.payload;
-                    state.loading = false;
-                }
-            )
-            .addCase(fetchTopProductsThunk.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || "Error fetching top products";
+            .addCase(fetchTopClientsRevenueThunk.fulfilled, (state, action) => {
+                state.topSellers = action.payload;
             })
-            .addCase(
-                fetchTopClientsRevenueThunk.fulfilled,
-                (state, action: PayloadAction<TopClientRevenue[]>) => {
-                    state.topSellers = action.payload;
-                    state.loading = false;
-                }
-            )
-            .addCase(
-                fetchTopSellersItemsThunk.fulfilled,
-                (state, action: PayloadAction<TopSellerItems[]>) => {
-                    state.topSellersItems = action.payload;
-                    state.loading = false;
-                }
-            )
+            .addCase(fetchTopSellersItemsThunk.fulfilled, (state, action) => {
+                state.topSellersItems = action.payload;
+            })
             .addCase(fetchTopClientsOrdersThunk.fulfilled, (state, action) => {
                 state.topClientsOrders = action.payload;
-                state.loading = false;
             })
             .addCase(
                 fetchTopClientsProductsThunk.fulfilled,
-                (state, action: PayloadAction<TopClientProducts[]>) => {
+                (state, action) => {
                     state.topClientsProducts = action.payload;
-                    state.loading = false;
                 }
-            );
+            )
+
+            .addMatcher(isPending(...reportThunks), (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addMatcher(isFulfilled(...reportThunks), (state) => {
+                state.loading = false;
+            })
+            .addMatcher(isRejected(...reportThunks), (state, action) => {
+                state.loading = false;
+                state.error =
+                    (action.payload as string) || "Failed to fetch report data";
+            });
     },
 });
 

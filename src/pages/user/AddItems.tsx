@@ -158,7 +158,7 @@ export const AddItems = () => {
                 disabled={submitting}
                 startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
             >
-                {submitting ? "Adding..." : "Add Item"} // CHANGED
+                {submitting ? "Adding..." : "Add Item"}
             </Button>
         </Box>
     );

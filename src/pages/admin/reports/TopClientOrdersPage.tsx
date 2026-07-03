@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchTopClientsOrdersThunk } from "../../../features/admin/reportsSlice";
 import {
-    Typography,
-    CircularProgress,
     Box,
     Button,
     TextField,
@@ -53,16 +51,13 @@ export const TopClientsOrdersPage = () => {
                 </Button>
             </Box>
 
-            {loading && <CircularProgress />}
-            {error && <Typography color="error">{error}</Typography>}
-
-            {!loading && !error && topClientsOrders.length > 0 && (
-                <ReportTable
-                    data={tableData}
-                    nameHeader="Client"
-                    valueHeader="Orders"
-                />
-            )}
+            <ReportTable
+                data={tableData}
+                nameHeader="Client"
+                valueHeader="Orders"
+                loading={loading}
+                error={error}
+            />
         </Box>
     );
 };

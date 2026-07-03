@@ -3,7 +3,7 @@ import { usePurchasesData } from "../../hooks/usePurchasesData";
 import { PurchaseCard } from "../../components/purchases/PurchaseCard";
 
 export const Purchases = () => {
-    const { purchases, loading, error, getItemDetails } = usePurchasesData();
+    const { purchases, loading, error } = usePurchasesData();
 
     if (loading)
         return (
@@ -37,7 +37,6 @@ export const Purchases = () => {
                 <PurchaseCard
                     key={p.purchaseId}
                     purchase={p}
-                    getItemDetails={getItemDetails}
                 />
             ))}
         </Box>

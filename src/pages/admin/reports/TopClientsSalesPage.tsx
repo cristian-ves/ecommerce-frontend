@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchTopSellersItemsThunk } from "../../../features/admin/reportsSlice";
-import { Box, Button, TextField, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import ReportTable from "../../../components/admin/ReportTable";
 import { getDefaultDates } from "../../../helper/reportsDate";
 
@@ -47,16 +47,13 @@ export const TopClientsSalesPage = () => {
                 </Button>
             </Box>
 
-            {loading && <CircularProgress />}
-            {error && <Typography color="error">{error}</Typography>}
-
-            {!loading && !error && topSellersItems.length > 0 && (
-                <ReportTable
-                    data={tableData}
-                    nameHeader="Seller"
-                    valueHeader="Items Sold"
-                />
-            )}
+            <ReportTable
+                data={tableData}
+                nameHeader="Seller"
+                valueHeader="Items Sold"
+                loading={loading}
+                error={error}
+            />
         </Box>
     );
 };

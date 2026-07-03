@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchTopProductsThunk } from "../../../features/admin/reportsSlice";
-import { Typography, CircularProgress, Box, Button, TextField, Stack } from "@mui/material";
+import { Box, Button, TextField, Stack } from "@mui/material";
 import ReportTable from "../../../components/admin/ReportTable";
 import { getDefaultDates } from "../../../helper/reportsDate";
 
@@ -17,8 +17,6 @@ export const TopProductsPage = () => {
         dispatch(fetchTopProductsThunk({ startDate, endDate }));
     }, [dispatch, startDate, endDate]);
 
-    if (loading) return <CircularProgress />;
-    if (error) return <Typography color="error">{error}</Typography>;
 
     const tableData = topProducts.map((p) => ({
         id: p.itemId,
@@ -55,6 +53,8 @@ export const TopProductsPage = () => {
                 data={tableData}
                 nameHeader="Product"
                 valueHeader="Units Sold"
+                error={error}
+                loading={loading}
             />
         </Box>
     );

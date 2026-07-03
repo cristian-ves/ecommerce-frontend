@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchTopClientsProductsThunk } from "../../../features/admin/reportsSlice";
-import { Typography, CircularProgress, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import ReportTable from "../../../components/admin/ReportTable";
 
 export const TopClientsProductsPage = () => {
@@ -22,16 +22,13 @@ export const TopClientsProductsPage = () => {
 
     return (
         <Box>
-            {loading && <CircularProgress />}
-            {error && <Typography color="error">{error}</Typography>}
-
-            {!loading && !error && topClientsProducts.length > 0 && (
-                <ReportTable
-                    data={tableData}
-                    nameHeader="Client"
-                    valueHeader="Products for Sale"
-                />
-            )}
+            <ReportTable
+                data={tableData}
+                nameHeader="Client"
+                valueHeader="Products for Sale"
+                error={error}
+                loading={loading}
+            />
         </Box>
     );
 };

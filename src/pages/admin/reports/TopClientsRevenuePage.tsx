@@ -4,8 +4,6 @@ import {
     fetchTopClientsRevenueThunk,
 } from "../../../features/admin/reportsSlice";
 import {
-    Typography,
-    CircularProgress,
     Box,
     Button,
     TextField,
@@ -56,16 +54,14 @@ export const TopClientsRevenuePage = () => {
                 </Button>
             </Box>
 
-            {loading && <CircularProgress />}
-            {error && <Typography color="error">{error}</Typography>}
 
-            {!loading && !error && topSellers.length > 0 && (
-                <ReportTable
-                    data={tableData}
-                    nameHeader="Client"
-                    valueHeader="Total earnt ($)"
-                />
-            )}
+            <ReportTable
+                data={tableData}
+                nameHeader="Client"
+                valueHeader="Total earnt ($)"
+                loading={loading}
+                error={error}
+            />
         </Box>
     );
 };

@@ -40,8 +40,8 @@ export const ItemRequests = () => {
     );
 
     return (
-        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" }}>
-            <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start", gap: 2 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 2 }}>
                 {items.length === 0 ? (
 
                     <div>

@@ -39,4 +39,7 @@ export interface ItemPurchasedDTO {
     userId: number;
     purchaseId: number;
     quantity: number;
+    name: string;
+    image: string;
+    price: number;
 }

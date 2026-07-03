@@ -1,7 +1,7 @@
 import { TableRow, TableCell, Button } from "@mui/material";
 import { toggleBanThunk, type UserManager } from "../../features/mod";
 import { useSnackbar } from "notistack";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 interface Props {
     user: UserManager;
@@ -12,6 +12,7 @@ interface Props {
 export const UserRow = ({ user, actionLabel, actionColor = "primary" }: Props) => {
 
     const dispatch = useAppDispatch();
+    const { banningId } = useAppSelector(state => state.mod);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -34,8 +35,9 @@ export const UserRow = ({ user, actionLabel, actionColor = "primary" }: Props) =
                     color={actionColor}
                     size="small"
                     onClick={handleBanToggle}
+                    disabled={banningId === user.id}
                 >
-                    {actionLabel}
+                    {banningId === user.id ? actionLabel + 'ning...' : actionLabel}
                 </Button>
             </TableCell>
         </TableRow>

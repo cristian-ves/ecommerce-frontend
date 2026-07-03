@@ -4,14 +4,10 @@ import type { PurchaseDTO } from "../../features/purchase/type";
 
 interface PurchaseCardProps {
     purchase: PurchaseDTO;
-    getItemDetails: (id: number) => any;
 }
 
-export const PurchaseCard = ({ purchase, getItemDetails }: PurchaseCardProps) => {
-    const total = purchase.items.reduce((sum, item) => {
-        const details = getItemDetails(item.itemId);
-        return sum + (details?.price || 0) * item.quantity;
-    }, 0);
+export const PurchaseCard = ({ purchase }: PurchaseCardProps) => {
+
 
     return (
         <Card
@@ -27,7 +23,7 @@ export const PurchaseCard = ({ purchase, getItemDetails }: PurchaseCardProps) =>
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">
-                    <strong>Total:</strong> ${total.toFixed(2)}
+                    <strong>Total:</strong> ${purchase.total.toFixed(2)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     <strong>Delivered:</strong> {purchase.delivered ? "Yes" : "No"}
@@ -48,15 +44,14 @@ export const PurchaseCard = ({ purchase, getItemDetails }: PurchaseCardProps) =>
                     justifyContent="flex-start"
                     gap={2}
                 >
-                    {purchase.items.map((item) => {
-                        const itemDetails = getItemDetails(item.itemId);
+                    {purchase.items.map(({ itemId, name, image, price, quantity }) => {
                         return (
                             <ItemPreview
-                                key={item.itemId}
-                                name={itemDetails?.name || "Unknown"}
-                                image={itemDetails?.image}
-                                price={itemDetails?.price}
-                                quantity={item.quantity}
+                                key={itemId}
+                                name={name}
+                                image={image}
+                                price={price}
+                                quantity={quantity}
                             />
                         );
                     })}
