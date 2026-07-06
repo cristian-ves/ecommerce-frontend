@@ -1,73 +1,194 @@
-# React + TypeScript + Vite
+# E-Commerce Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for a full-stack e-commerce platform with role-based access control. Features a buyer marketplace, seller dashboard, moderator panel, logistics management, and admin reporting.
 
-Currently, two official plugins are available:
+**Live site:** https://ecommerce-cav.netlify.app  
+**Backend repo:** https://github.com/cristian-ves/ecommerce-backend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> **Demo accounts — no sign up needed.** Click any role button on the landing page to log in instantly and explore the app.
 
-## React Compiler
+| Role      | Email              | Password |
+| --------- | ------------------ | -------- |
+| Buyer     | buyer@demo.com     | demo1234 |
+| Moderator | mod@demo.com       | demo1234 |
+| Logistics | logistics@demo.com | demo1234 |
+| Admin     | admin@demo.com     | demo1234 |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Screenshots
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Landing page
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+![Landing page](screenshots/01-landing.png)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Buy — product marketplace
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+![Buy page](screenshots/02-buy.png)
+
+### Cart
+
+![Cart](screenshots/03-cart.png)
+
+### Purchases
+
+![Purchases](screenshots/04-purchases.png)
+
+### Moderator — item requests
+
+![Item requests](screenshots/05-mod-requests.png)
+
+### Admin — reports
+
+![Reports](screenshots/06-admin-reports.png)
+
+---
+
+## Tech Stack
+
+| Category         | Technology           |
+| ---------------- | -------------------- |
+| Framework        | React 18             |
+| Language         | TypeScript           |
+| Build tool       | Vite 7               |
+| UI library       | MUI (Material UI) v7 |
+| State management | Redux Toolkit        |
+| Routing          | React Router v6      |
+| HTTP client      | Axios                |
+| Notifications    | Notistack            |
+| Alerts           | SweetAlert2          |
+
+---
+
+## Features by Role
+
+### Buyer
+
+-   Browse paginated product listings with search and category filters
+-   Add products to cart with real-time optimistic UI updates
+-   Manage cart — increment, decrement, remove items, clear cart
+-   Checkout with saved or new payment card
+-   View purchase history with item details and delivery status
+-   Rate and review products
+
+### Moderator
+
+-   Review pending item requests submitted by sellers
+-   Accept or reject items before they appear in the marketplace
+-   Manage user bans — view active and banned users, toggle ban status
+
+### Logistics
+
+-   View all purchases across the platform
+-   Mark purchases as delivered
+-   Update expected delivery dates
+
+### Admin
+
+-   Manage employee accounts (create, edit)
+-   Access reports dashboard:
+    -   Top 10 best-selling products
+    -   Top 5 clients by revenue
+    -   Top 5 clients by sales volume
+    -   Top 10 clients by order count
+    -   Top 10 clients by products listed
+-   All time-range reports support custom date filtering
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+-   Node.js 18+
+-   npm or yarn
+
+### Local setup
+
+**1. Clone the repo**
+
+```bash
+git clone https://github.com/cristian-ves/ecommerce-frontend
+cd ecommerce-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**2. Install dependencies**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+**3. Configure environment**
+
+Create a `.env.local` file at the project root (gitignored):
+
+```env
+VITE_API_URL=http://localhost:8080
+```
+
+To test against the live backend instead of local, use:
+
+```env
+VITE_API_URL=https://ecommerce-backend-f4f3.onrender.com
+```
+
+**4. Start the dev server**
+
+```bash
+npm run dev
+```
+
+App runs at `http://localhost:5173`
+
+### Environment files
+
+| File               | Purpose                           | Committed |
+| ------------------ | --------------------------------- | --------- |
+| `.env.development` | Local dev defaults                | Yes       |
+| `.env.production`  | Production API URL                | Yes       |
+| `.env.example`     | Documents required variables      | Yes       |
+| `.env.local`       | Local overrides (never committed) | No        |
+
+---
+
+## Project Structure
+
+```
+src/
+├── api/              — Axios instance with JWT interceptor
+├── components/       — Reusable UI components by domain
+│   ├── cart/
+│   ├── connection/   — ConnectionOverlay for cold start UX
+│   ├── items/
+│   ├── main/         — Landing page components + DemoAccounts
+│   ├── mod/
+│   ├── purchases/
+│   └── admin/
+├── features/         — Redux slices and async thunks
+│   ├── auth/
+│   ├── cart/
+│   ├── connection/
+│   ├── items/
+│   ├── mod/
+│   ├── log/
+│   ├── admin/
+│   └── purchase/
+├── hooks/            — Custom React hooks
+├── pages/            — Page-level components by role
+│   ├── auth/
+│   ├── user/
+│   ├── mod/
+│   ├── log/
+│   └── admin/
+├── routes/           — Role-based routing and layouts
+├── store/            — Redux store configuration
+└── utils/            — Theme, date helpers
+```
+
+---
+
+## Known Limitations
+
+-   Payment processing is simulated — use any values in the card form (for example: 1234 1234 1234 1234, 12/29, 123)
+-   Product images are external links (Pexels) and may load slowly depending on network conditions
+-   Backend hosted on Render free tier — first load after inactivity may take up to 50 seconds
