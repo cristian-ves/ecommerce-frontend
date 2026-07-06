@@ -3,14 +3,9 @@ import mainImage from './assets/main.png';
 import { AppInfo } from './components/main/AppInfo';
 
 export default function App() {
+
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
       <Container
         sx={{
           display: "flex",

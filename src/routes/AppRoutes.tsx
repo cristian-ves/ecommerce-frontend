@@ -27,6 +27,7 @@ import { TopClientsRevenuePage } from "../pages/admin/reports/TopClientsRevenueP
 import { TopClientsSalesPage } from "../pages/admin/reports/TopClientsSalesPage";
 import { TopClientsOrdersPage } from "../pages/admin/reports/TopClientOrdersPage";
 import { TopClientsProductsPage } from "../pages/admin/reports/TopClientsProducstsPage";
+import { useBackendConnection } from "../features/connection/useBackendConnection";
 
 export default function AppRoutes() {
 
@@ -34,6 +35,8 @@ export default function AppRoutes() {
     const { user, loading } = useAppSelector((state) => state.auth);
 
     const token = localStorage.getItem("token");
+
+    useBackendConnection();
 
     useEffect(() => {
         if (token && !user) {
