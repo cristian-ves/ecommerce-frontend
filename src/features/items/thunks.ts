@@ -14,7 +14,6 @@ import type {
     ReviewItemPayload,
     UpdatedItem,
 } from "./types";
-import { ITEMS_TO_LOAD } from "../../hooks/useItemsLoader";
 
 type ThunkConfig = { state: { items: ItemsState }; rejectValue: string };
 
