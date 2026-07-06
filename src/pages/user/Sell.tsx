@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { loadMyItems, type Item } from "../../features/items";
@@ -15,9 +15,9 @@ export const Sell = () => {
         if (user) dispatch(loadMyItems({ id: user.id }));
     }, [dispatch, user]);
 
-    const handleEdit = (item: Item) => {
+    const handleEdit = useCallback((item: Item) => {
         navigate(`/user/sell/item/${item.id}`, { state: { item } });
-    };
+    }, [navigate]);
 
     if (loading) {
         return (

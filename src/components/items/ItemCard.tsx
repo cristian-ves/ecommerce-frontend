@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Box, Button, Card, CardContent, Typography, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSnackbar } from "notistack";
@@ -14,16 +14,17 @@ interface ItemCardProps {
     isShowingButton?: boolean;
 }
 
-export const ItemCard = ({ item, onEdit, isShowingButton = true }: ItemCardProps) => {
+export const ItemCard = memo(({ item, onEdit, isShowingButton = true }: ItemCardProps) => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
-    const { items } = useAppSelector((state) => state.cart);
+    const alreadyInCart = useAppSelector((state) =>
+        state.cart.items.some((cartItem) => cartItem.item.id === item.id)
+    );
     const { enqueueSnackbar } = useSnackbar();
 
     const [optimisticAdded, setOptimisticAdded] = useState(false);
 
     const isMine = user?.id === item.user.id;
-    const alreadyInCart = items.some((cartItem) => cartItem.item.id === item.id);
 
     const handleAddToCart = () => {
         if (!user) return;
@@ -37,6 +38,8 @@ export const ItemCard = ({ item, onEdit, isShowingButton = true }: ItemCardProps
             sx={{
                 width: 280,
                 height: 525,
+                contentVisibility: "auto",
+                containIntrinsicSize: "280px 525px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -83,4 +86,6 @@ export const ItemCard = ({ item, onEdit, isShowingButton = true }: ItemCardProps
             )}
         </Card>
     );
-};
+});
+
+ItemCard.displayName = "ItemCard";

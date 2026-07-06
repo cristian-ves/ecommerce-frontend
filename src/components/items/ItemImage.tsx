@@ -20,7 +20,7 @@ export const ItemImage = ({ src, alt }: ItemImageProps) => {
                     sx={{ position: "absolute", inset: 0, height: "100%", width: "100%" }}
                 />
             )}
-            {state === "error" && (
+            {state === "error" ? (
                 <Box
                     sx={{
                         height: 180,
@@ -35,21 +35,24 @@ export const ItemImage = ({ src, alt }: ItemImageProps) => {
                         Image not available
                     </Typography>
                 </Box>
+            ) : (
+                <CardMedia
+                    component="img"
+                    image={src}
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() => setState("loaded")}
+                    onError={() => setState("error")}
+                    sx={{
+                        height: "100%",
+                        width: "100%",
+                        objectFit: "cover",
+                        opacity: state === "loaded" ? 1 : 0,
+                        transition: "opacity 0.2s ease",
+                    }}
+                />
             )}
-            <CardMedia
-                component="img"
-                image={src}
-                alt={alt}
-                onLoad={() => setState("loaded")}
-                onError={() => setState("error")}
-                sx={{
-                    height: 180,
-                    aspectRatio: "1 / 1",
-                    objectFit: "cover",
-                    opacity: state === "loaded" ? 1 : 0,
-                    position: state === "error" ? "absolute" : "relative",
-                }}
-            />
         </Box>
     );
 };
