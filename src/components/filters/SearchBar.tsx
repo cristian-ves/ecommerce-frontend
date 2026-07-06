@@ -1,19 +1,22 @@
-import { useState } from "react";
-
 import { Box, TextField, InputAdornment, IconButton } from "@mui/material";
 import { Search } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setQuery } from "../../features/items";
+import { useProductSearch } from "../../hooks/useProductSearch";
 
-import { useAppDispatch } from "../../store/hooks";
-import { searchItemsByQuery } from "../../features/items";
+interface SearchBarProps {
+    onSearch?: () => void;
+}
 
-
-export const SearchBar = () => {
+export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     const dispatch = useAppDispatch();
-    const [query, setQuery] = useState('');
+    const query = useAppSelector((state) => state.items.filters.query);
+    const { runSearch } = useProductSearch();
 
     const handleSearch = () => {
-        dispatch(searchItemsByQuery({ query: query }));
-    }
+        runSearch();
+        onSearch?.();
+    };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') handleSearch();
@@ -26,7 +29,7 @@ export const SearchBar = () => {
                 size="small"
                 placeholder="Search items..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => dispatch(setQuery(e.target.value))}
                 onKeyDown={handleKeyPress}
                 InputProps={{
                     endAdornment: (

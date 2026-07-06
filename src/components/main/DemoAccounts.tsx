@@ -28,8 +28,8 @@ export const DemoAccounts = () => {
         <Paper
             elevation={0}
             sx={{
-                mt: 2,
-                p: 3,
+                mt: { xs: 1, sm: 2 },
+                p: { xs: 1.5, sm: 3 },
                 borderRadius: 4,
                 border: "1.5px solid",
                 borderColor: "primary.main",
@@ -49,27 +49,49 @@ export const DemoAccounts = () => {
                 fontWeight={600}
                 color="primary.main"
                 gutterBottom
+                sx={{ fontSize: { xs: '0.8rem', sm: '1rem' }, mb: { xs: 0.5, sm: 1 } }}
             >
                 Try a demo account
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+            >
                 Explore the app as different roles — no sign up needed
             </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, justifyContent: "center" }}>
+            <Box
+                sx={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    gap: { xs: 0.75, sm: 1.5 },
+                    justifyContent: "center",
+                }}
+            >
                 {DEMO_ACCOUNTS.map(({ label, email, password }) => (
                     <Button
                         key={label}
                         variant="contained"
+                        size="small"
                         disabled={loadingRole !== null}
                         onClick={() => handleDemoLogin(email, password, label)}
-                        startIcon={loadingRole === label ? <CircularProgress size={14} color="inherit" /> : null}
-                        sx={{ minWidth: 110 }}
+                        startIcon={loadingRole === label ? <CircularProgress size={12} color="inherit" /> : null}
+                        sx={{
+                            minWidth: 0,
+                            px: { xs: 0.5, sm: 2 },
+                            fontSize: { xs: '0.65rem', sm: '0.875rem' },
+                        }}
                     >
                         {label}
                     </Button>
                 ))}
             </Box>
-            <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 2 }}>
+            <Typography
+                variant="caption"
+                color="text.secondary"
+                display="block"
+                sx={{ mt: { xs: 1, sm: 2 }, fontSize: { xs: '0.6rem', sm: '0.75rem' }, display: { xs: 'none', sm: 'block' } }}
+            >
                 Demo only — enter any values where forms require it (for example payment details)
             </Typography>
         </Paper>

@@ -1,35 +1,42 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import mainImage from './assets/main.png';
 import { AppInfo } from './components/main/AppInfo';
 
 export default function App() {
-
   return (
-    <Container
+    <Box
       sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column-reverse', md: 'row' },
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 8,
-        minHeight: '100vh',
-        textAlign: { xs: 'center', md: 'left' },
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
       }}
     >
-      <img
-        alt="ecommerce"
-        src={mainImage}
-        style={{
-          width: '100%',
-          maxWidth: 500,
-          height: 'auto',
-          display: 'block',
-          margin: '0 auto'
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column-reverse", md: "row" },
+          alignItems: "center",
+          justifyContent: "center",
+          gap: { xs: 1.5, sm: 3, md: 8 },
+          textAlign: { xs: "center", md: "left" },
+          py: { xs: 2, md: 0 },
         }}
-      />
-
-      <AppInfo />
-
-    </Container>
+      >
+        <Box
+          component="img"
+          alt="ecommerce"
+          src={mainImage}
+          sx={{
+            width: "100%",
+            maxWidth: { xs: 200, sm: 350, md: 500 },
+            height: "auto",
+            display: "block",
+            mx: "auto",
+            flexShrink: 0,
+          }}
+        />
+        <AppInfo />
+      </Container>
+    </Box>
   );
 }

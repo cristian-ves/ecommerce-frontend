@@ -44,6 +44,11 @@ export interface UpdatedItem extends NewItem {
     id: number;
 }
 
+interface Filters {
+    query: string;
+    categoryIds: [];
+}
+
 export interface ItemsState {
     items: Item[];
     myItems: Item[];
@@ -51,6 +56,7 @@ export interface ItemsState {
     error: string | null;
     page: number;
     hasMore: boolean;
+    filters: Filters;
 }
 
 export interface ReviewItemPayload {
