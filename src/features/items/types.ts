@@ -46,7 +46,7 @@ export interface UpdatedItem extends NewItem {
 
 interface Filters {
     query: string;
-    categoryIds: [];
+    categoryIds: number[];
 }
 
 export interface ItemsState {
